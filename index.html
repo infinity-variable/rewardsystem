@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>奖励转盘系统</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" href="img/bagua.png">
+</head>
+<body>
+  <!-- 备份提醒条 -->
+  <div id="backup-reminder" class="backup-reminder hidden">
+    <span class="backup-reminder-text">为了数据安全，建议导出一份备份</span>
+    <button id="backup-reminder-export" class="btn-success btn-window">立即导出</button>
+    <button id="backup-reminder-close" class="backup-reminder-close" title="关闭">&times;</button>
+  </div>
+
+  <!-- 主界面 -->
+  <div id="main-screen">
+    <div id="info-buttons">
+      <button id="coin-info-btn" class="info-coin-btn"><img src="img/package.png" class="btn-icon">铜币：<span id="coin-total-count">0</span><span class="red-dot"></span></button>
+      <button id="points-info-btn" class="info-coin-btn"><img src="img/point.png" class="btn-icon">贝筹：<span id="points">0</span></button>
+    </div>
+
+    <div id="lot-container" title="抽签">
+      <img id="lot-img" src="img/container.png" alt="签筒">
+    </div>
+
+    <!-- 里程碑进度条 -->
+    <div id="milestone-progress">
+      <div id="progress-bar-track">
+        <div id="progress-bar-fill"></div>
+        <div id="progress-chests"></div>
+        <span id="progress-label">0</span>
+      </div>
+    </div>
+
+    <div id="action-buttons">
+      <button id="settings-btn"> 设置 </button>
+      <button id="shop-btn" title="点击打开贝筹商城"> 商城 </button>
+      <button id="lottery-btn"> 转盘 </button>
+      <button id="achievement-btn"> 成就 <span class="red-dot"></span></button>
+      <button id="task-btn"> 任务 <span class="red-dot"></span></button>
+    </div>
+  </div>
+
+  <!-- 提示消息 -->
+  <div id="toast" class="toast"></div>
+
+  <!-- 荷包弹窗 -->
+  <div id="backpack-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="btn-x" id="backpack-cancel" title="关闭（Esc）">&times;</button>
+      <h2>荷包</h2>
+      <div class="help-tabs bp-tabs">
+        <button class="help-tab active" data-bp-tab="coin">硬币</button>
+        <button class="help-tab" data-bp-tab="talisman">符箓</button>
+        <button class="help-tab" data-bp-tab="fragment">币胚 <span class="red-dot"></span></button>
+      </div>
+      <!-- 硬币页 -->
+      <div class="help-panel active" data-bp-panel="coin">
+        <div id="coin-select"></div>
+        <!-- 铜币流水 -->
+        <div class="log-header">
+          <button id="coin-log-copy-btn" class="btn-copy btn-window">复制流水</button>
+          <p class="hint">累计投币：<span id="coin-log-invested" class="milestone-highlight">0</span></p>
+        </div>
+        <div id="coin-log-list"></div>
+        <p id="coin-log-empty" class="hint hidden">暂无铜币记录</p>
+        <div id="coin-log-pagination" class="pagination">
+          <button id="coin-log-prev" class="page-btn">&lt;</button>
+          <span id="coin-log-page-info" class="page-info"></span>
+          <button id="coin-log-next" class="page-btn">&gt;</button>
+        </div>
+      </div>
+      <!-- 符箓页 -->
+      <div class="help-panel" data-bp-panel="talisman">
+        <div id="talisman-grid" class="item-grid"></div>
+        <p class="hint">点击符箓可使用；悬浮可查看说明</p>
+      </div>
+      <!-- 币胚页 -->
+      <div class="help-panel" data-bp-panel="fragment">
+        <div id="fragment-display" class="fragment-display"></div>
+        <p class="hint">每 8 个币胚可随机合成一枚八卦硬币</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 币胚合成弹窗 -->
+  <div id="fragment-synth-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content milestone-modal-content">
+      <button class="btn-x" id="fragment-synth-cancel" title="关闭（Esc）">&times;</button>
+      <h2>币胚合成</h2>
+      <p class="milestone-modal-text">当前币胚：<span id="synth-fragment-count" class="milestone-highlight">0</span></p>
+      <p id="synth-fragment-hint" class="milestone-modal-text"></p>
+      <div class="modal-actions">
+        <button id="synth-confirm-btn" class="btn-success btn-window">合成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 符箓使用确认弹窗 -->
+  <div id="talisman-use-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content milestone-modal-content">
+      <button class="btn-x" id="talisman-use-cancel" title="关闭（Esc）">&times;</button>
+      <div class="milestone-trophy" id="talisman-use-abbr">📜</div>
+      <h2 id="talisman-use-title">使用符箓</h2>
+      <p class="milestone-modal-text" id="talisman-use-name"></p>
+      <p class="milestone-modal-text" id="talisman-use-desc"></p>
+      <div class="modal-actions">
+        <button id="talisman-use-confirm-btn" class="btn-success btn-window">使用</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 奖励转盘弹窗 -->
+  <div id="reward-wheel-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content wheel-modal">
+      <button class="btn-x" id="reward-wheel-cancel" title="关闭（Esc）">&times;</button>
+      <h2>奖励转盘</h2>
+      <div class="wheel-wrapper">
+        <div class="wheel-pointer"></div>
+        <canvas id="reward-wheel" width="300" height="300"></canvas>
+      </div>
+      <div id="reward-result" class="result-display"></div>
+      <div id="spin-buttons">
+        <button id="spin-btn" class="btn-window" disabled>转一次</button>
+        <button id="spin-ten-btn" class="btn-window" disabled>转十次</button>
+      </div>
+      <button id="reward-close" class="btn-close btn-window hidden">收下</button>
+    </div>
+  </div>
+
+  <!-- 机缘转盘弹窗 -->
+  <div id="bonus-wheel-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content wheel-modal">
+      <button class="btn-x" id="bonus-wheel-cancel" title="关闭（Esc）">&times;</button>
+      <h2>机缘转盘</h2>
+      <div class="wheel-wrapper">
+        <div class="wheel-pointer"></div>
+        <canvas id="bonus-wheel" width="300" height="300"></canvas>
+      </div>
+      <div id="bonus-result" class="result-display"></div>
+    </div>
+  </div>
+
+  <!-- 机缘挑战弹窗 -->
+  <div id="bonus-challenge-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2 id="bonus-challenge-title">挑战</h2>
+      <div id="challenge-text" class="challenge-text"></div>
+      <div id="challenge-items" class="challenge-items"></div>
+      <div id="challenge-actions" class="modal-actions">
+        <button id="challenge-complete" class="btn-success btn-window">完成挑战</button>
+        <button id="challenge-giveup" class="btn-danger btn-window">放弃</button>
+      </div>
+      <div id="bonus-reward-area" class="hidden">
+        <div id="bonus-reward-grid" class="center-row-wrap"></div>
+        <button id="bonus-reward-close" class="btn-success btn-window btn-center-block">收下</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 贝筹商城弹窗 -->
+  <div id="shop-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="btn-x" id="shop-cancel" title="关闭（Esc）">&times;</button>
+      <h2>贝筹商城</h2>
+      <p class="hint">当前贝筹：<span id="shop-points" class="milestone-highlight">0</span></p>
+      <div class="help-tabs">
+        <button class="help-tab active shop-sub-tab" data-shop-tab="current">商品</button>
+        <button class="help-tab shop-sub-tab" data-shop-tab="history">历史商品</button>
+      </div>
+      <div class="help-panel active shop-sub-panel" data-shop-panel="current">
+        <div id="shop-grid" class="achievement-grid"></div>
+        <p id="shop-empty" class="hint hidden">暂无商品，请在设置中添加</p>
+        <div class="center-row-top">
+          <button class="btn-success btn-window hidden" id="shop-buy-btn">购买</button>
+        </div>
+      </div>
+      <div class="help-panel shop-sub-panel" data-shop-panel="history">
+        <div id="shop-history-grid" class="achievement-grid"></div>
+        <p id="shop-history-empty" class="hint hidden">暂无历史商品</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 兑换确认弹窗 -->
+  <div id="redeem-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content milestone-modal-content">
+      <div class="milestone-trophy">🎁</div>
+      <h2>确认兑换？</h2>
+      <p class="milestone-modal-text">商品：<span id="redeem-item-name" class="milestone-highlight">—</span></p>
+      <p class="milestone-modal-text">消耗贝筹：<span id="redeem-item-cost" class="milestone-highlight">0</span></p>
+      <div class="modal-actions">
+        <button id="redeem-cancel" class="btn-cancel">取消</button>
+        <button id="redeem-confirm" class="btn-success btn-window">确认兑换</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 设置弹窗 -->
+  <div id="settings-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="btn-x" id="settings-cancel" title="关闭（Esc）">&times;</button>
+      <h2>设置</h2>
+      <div class="help-tabs">
+        <button class="help-tab active" data-set-tab="general">通用</button>
+        <button class="help-tab" data-set-tab="shop">商城商品</button>
+      </div>
+      <!-- 通用面板：任务 / 里程碑 / 数据管理 / 帮助 / 关于 -->
+      <div class="help-panel active" data-set-panel="general">
+        <div class="milestone-section">
+          <h3>任务 <button class="btn-add-milestone" id="add-task">+</button></h3>
+          <p class="hint">当执行任务达到指定数量时可抽奖，建议每条任务量大于3个</p>
+          <div id="task-list"></div>
+        </div>
+
+        <div class="milestone-section">
+          <h3>里程碑奖励 <button class="btn-add-milestone" id="add-milestone">+</button></h3>
+          <p class="hint">当累计投入铜币达到指定数量时，达成里程碑奖励，初始建议设置5个</p>
+          <div id="milestone-list"></div>
+        </div>
+
+        <div class="milestone-section">
+          <h3>数据管理</h3>
+          <p class="hint">导出当前数据到文件，或从文件导入恢复数据，防止清零丢失</p>
+          <div class="data-backup-actions">
+            <button id="export-data-btn" class="btn-success btn-window">导出数据</button>
+            <button id="import-data-btn" class="btn-success btn-window">导入数据</button>
+            <button id="settings-reset" class="btn-danger btn-window">清零</button>
+            <input type="file" id="import-data-file" accept=".json" class="hidden">
+          </div>
+        </div>
+
+        <div class="milestone-section">
+          <h3>帮助</h3>
+          <p class="hint">重看首次玩法引导，或查看完整使用说明</p>
+          <div class="data-backup-actions">
+            <button id="replay-onboarding-btn" class="btn-success btn-window">新手引导</button>
+            <button id="settings-help" class="btn-success btn-window">使用说明</button>
+          </div>
+        </div>
+
+        <div class="milestone-section">
+          <h3>关于</h3>
+          <p class="hint">主页会随机掉落生产力相关内容和工具，如果有问题或建议，可以去这些地方找我</p>
+          <div class="about-links">
+            <a class="about-link" href="https://b23.tv/yWJkTSC" target="_blank" rel="noopener noreferrer" title="哔哩哔哩">
+              <img src="img/logo/bilibili.png" alt="哔哩哔哩">
+            </a>
+            <a class="about-link" href=" https://xhslink.com/m/6I6pbFn5aWa" target="_blank" rel="noopener noreferrer" title="小红书">
+              <img src="img/logo/red.png" alt="小红书">
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 商城商品面板 -->
+      <div class="help-panel" data-set-panel="shop">
+        <div class="milestone-section">
+          <h3>商城商品 <button class="btn-add-milestone" id="add-shop-item">+</button></h3>
+          <p class="hint">设置贝筹商城中的商品及所需贝筹</p>
+          <div id="shop-item-list"></div>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="settings-save" class="btn-success btn-window">保存</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 数据分析看板弹窗 -->
+  <div id="analytics-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content analytics-modal-content">
+      <button class="btn-x" id="analytics-cancel" title="关闭（Esc）">&times;</button>
+      <h2>数据看板</h2>
+      <p class="hint">基于本地埋点统计的产品指标（北极星：周均抽签次数）</p>
+      <div id="analytics-content"></div>
+    </div>
+  </div>
+
+  <!-- 统一说明弹窗 -->
+  <div id="help-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <div class="help-tabs">
+        <button class="help-tab active" data-tab="suggest">建议设置</button>
+        <button class="help-tab" data-tab="quick">快速上手</button>
+        <button class="help-tab" data-tab="detail">详细说明</button>
+      </div>
+      <div class="help-panel active" data-panel="suggest">
+        <h2>建议</h2>
+        <div class="coin-info-section">
+          <h3>里程碑</h3>
+          <p>建议初步设置不超过 5 个里程碑，在里程碑达成后再逐步添加。</p>
+        </div>
+        <div class="coin-info-section">
+          <h3>任务数量</h3>
+          <p>单条任务数量建议大于等于 4，这样在抽机缘时可以减量。</p>
+          <p>比如跑步 1km（写作 1000m），机缘界面如果抽到「一半」会自动换算为 500m。</p>
+        </div>
+        <div class="coin-info-section">
+          <h3>里程碑 vs 商城</h3>
+          <p>建议里程碑放大一点的，商城放小一点的立刻可以得到的。</p>
+          <p>大一点的可以是有点舍不得买的物品比如新电脑、不舍得去的地方比如三亚。小一点的可以是立刻就能得到的东西，比如推拿或者芝士蛋糕</p>
+        </div>
+        <div class="coin-info-section">
+          <h3>纯上瘾项</h3>
+          <p>商城一定要有一个纯上瘾的东西：如果对某个游戏上瘾就放个游戏局数，如果对刷短视频上瘾就放短视频时长，还有开盲盒或者收集周边。</p>
+          <p>这个纯上瘾的东西还有 3 个属性：</p>
+          <p>1、单是想到这个事情你就觉得蠢蠢欲动。</p>
+          <p>2、你不可以在非兑换的情况下得到它或体验它，比如选了游戏，没兑换就不可以玩。</p>
+          <p>3、在这个事情上投入大量时间和钱是让你后悔的。</p>
+        </div>
+      </div>
+      <div class="help-panel" data-panel="quick">
+        <h2>快速上手</h2>
+        <p class="hint">五步看懂核心玩法</p>
+        <div class="quick-step">
+          <div class="quick-step-num">1</div>
+          <div class="quick-step-body">
+            <h3>抽签得铜币</h3>
+            <p>点击主界面签筒抽签，随机获得一枚八卦铜币或太极币。</p>
+          </div>
+        </div>
+        <div class="quick-step">
+          <div class="quick-step-num">2</div>
+          <div class="quick-step-body">
+            <h3>投币转盘</h3>
+            <p>点「转盘」，每次自动投 3 枚铜币旋转奖励转盘。</p>
+          </div>
+        </div>
+        <div class="quick-step">
+          <div class="quick-step-num">3</div>
+          <div class="quick-step-body">
+            <h3>赢得贝筹</h3>
+            <p>转盘结果按等级发放贝筹（1/3/5/10），机缘可触发额外挑战。</p>
+          </div>
+        </div>
+        <div class="quick-step">
+          <div class="quick-step-num">4</div>
+          <div class="quick-step-body">
+            <h3>兑换奖励</h3>
+            <p>点「商城」，用贝筹兑换自定义商品。</p>
+          </div>
+        </div>
+        <div class="quick-step">
+          <div class="quick-step-num">5</div>
+          <div class="quick-step-body">
+            <h3>自定义设置</h3>
+            <p>点「设置」自定义任务、里程碑奖励、商城商品，开始哄自己做任务。</p>
+          </div>
+        </div>
+      </div>
+      <div class="help-panel" data-panel="detail">
+      <h2>游戏说明</h2>
+      <div class="coin-info-section">
+        <h3>获取铜币</h3>
+        <p>点击签筒抽签，随机获得一枚八卦铜币或太极币。</p>
+        <p>左键抽一次；右键签筒可弹出菜单选择「抽十次」。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>铜币种类</h3>
+        <p>八卦铜币：乾 ☰、兑 ☱、离 ☲、震 ☳、巽 ☴、坎 ☵、艮 ☶、坤 ☷</p>
+        <p>太极币：☯（抽签数字除 8 余 1 时获得）</p>
+        <p>每种铜币持有上限 10000 枚。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>投入铜币</h3>
+        <p>转一次：自动投入 3 枚铜币旋转转盘。</p>
+        <p>转十次：自动投入 30 枚铜币，连续旋转 10 次。</p>
+        <p>系统优先消耗数量最多的八卦币，不足时用太极币补齐。</p>
+        <p>「荷包」可查看各类铜币的持有数量。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>奖励转盘</h3>
+        <p>丙等 = 1 贝筹（45%）</p>
+        <p>乙等 = 3 贝筹（25%）</p>
+        <p>甲等 = 5 贝筹（15%）</p>
+        <p>至尊 = 10 贝筹（5%）</p>
+        <p>机缘 = 进入机缘转盘（10%，先得 1 贝筹）</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>机缘转盘</h3>
+        <p>四分之三 / 一半 / 四分之一：需完成对应比例的任务挑战。</p>
+        <p>挑战数 = 基础个数 × 百分比（四舍五入）。</p>
+        <p>完成挑战：获得甲等（5 贝筹）+ 1 枚太极币。</p>
+        <p>放弃挑战：获得乙等（3 贝筹）。</p>
+        <p>白得：直接获得甲等 + 太极币，无需挑战。</p>
+        <p>转十次累计的机缘可合并挑战，完成后按机缘次数发放奖励。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>里程碑奖励</h3>
+        <p>累计投币达到设定数量时，进度条上对应宝箱亮起，点击即可领取奖励。</p>
+        <p>在「设置」中可自定义里程碑目标与奖励内容。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>贝筹商城</h3>
+        <p>点击「商城」按钮，用贝筹兑换自定义商品。</p>
+        <p>商品列表可在「设置」中添加与管理。</p>
+      </div>
+      <div class="coin-info-section">
+        <h3>成就与收集</h3>
+        <p>成就：达成条件自动解锁，含隐藏成就，点击「成就」查看。</p>
+        <p>收集册：记录已抽到的 64 卦，可在成就页打开。</p>
+      </div>
+      </div>
+      <button class="btn-close btn-window" id="help-close">知道了</button>
+    </div>
+  </div>
+
+  <!-- 抽签结果弹窗 -->
+  <div id="draw-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content draw-modal-content">
+      <div id="draw-modal-coin-wrapper" class="draw-coin-wrapper">
+        <div class="draw-coin-item">
+          <div id="draw-modal-symbol" class="draw-coin-symbol">☰</div>
+        </div>
+        <div id="draw-modal-hexagram" class="draw-hexagram">乾为天</div>
+      </div>
+      <div id="draw-modal-name" class="draw-coin-name">乾</div>
+      <div id="draw-modal-daxiang" class="draw-daxiang"></div>
+      <button id="draw-modal-close" class="btn-success btn-window">收下</button>
+    </div>
+  </div>
+
+  <!-- 里程碑达成弹窗 -->
+  <div id="milestone-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content milestone-modal-content">
+      <div class="milestone-trophy">🏆</div>
+      <h2>里程碑达成！</h2>
+      <p class="milestone-modal-text">累计投入 <span id="milestone-modal-count" class="milestone-highlight">0</span> 枚</p>
+      <p class="milestone-modal-text">获得奖励：<span id="milestone-modal-reward" class="milestone-highlight">—</span></p>
+      <button id="milestone-modal-close" class="btn-success btn-window">太棒了！</button>
+    </div>
+  </div>
+
+  <!-- 清零确认弹窗 -->
+  <div id="reset-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content milestone-modal-content">
+      <div class="milestone-trophy">⚠️</div>
+      <h2>确认清零？</h2>
+      <p class="milestone-modal-text">所有数据将被重置，包括贝筹、铜币、累计投入等</p>
+      <p class="milestone-modal-text">此操作不可撤销！</p>
+      <div class="modal-actions">
+        <button id="reset-cancel" class="btn-cancel">取消</button>
+        <button id="reset-confirm" class="btn-danger btn-window">确认清零</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 贝筹流水弹窗 -->
+  <div id="log-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="btn-x" id="log-cancel" title="关闭（Esc）">&times;</button>
+      <h2>贝筹流水</h2>
+      <div class="log-header">
+        <button id="log-copy-btn" class="btn-copy btn-window">复制流水</button>
+        <p class="hint">当前贝筹：<span id="log-points" class="milestone-highlight">0</span></p>
+      </div>
+      <div id="log-list"></div>
+      <p id="log-empty" class="hint hidden">暂无贝筹记录</p>
+      <div id="log-pagination" class="pagination">
+        <button id="log-prev" class="page-btn">&lt;</button>
+        <span id="log-page-info" class="page-info"></span>
+        <button id="log-next" class="page-btn">&gt;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 转十次结果弹窗 -->
+  <div id="ten-spin-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content draw-modal-content">
+      <h2>十连转盘</h2>
+      <div id="ten-spin-grid"></div>
+      <div id="ten-spin-points" class="result-points"></div>
+      <div class="between-row">
+        <button class="btn-close btn-window" id="ten-spin-close">收下</button>
+        <button class="btn-close btn-window hidden" id="ten-spin-bonus">机缘</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 转一次结果弹窗 -->
+  <div id="one-spin-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content draw-modal-content">
+      <h2>转盘结果</h2>
+      <div id="one-spin-grid" class="draw-ten-grid grid-center"></div>
+      <div id="one-spin-points" class="result-points"></div>
+      <div class="center-gap-row">
+        <button class="btn-close btn-window" id="one-spin-close">收下</button>
+        <button class="btn-close btn-window hidden" id="one-spin-bonus-btn">机缘</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 成就恭喜弹窗 -->
+  <div id="achievement-congrats-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <h2 class="title-red-center">恭喜获得</h2>
+      <div id="achievement-congrats-list" class="congrats-list"></div>
+      <div class="center-row">
+        <button id="achievement-congrats-ok" class="btn-success btn-window">知道了</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 成就弹窗（含收集册 Tab） -->
+  <div id="achievement-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content">
+      <button class="btn-x" id="achievement-cancel" title="关闭（Esc）">&times;</button>
+      <div class="help-tabs">
+        <button class="help-tab active" data-tab="achievement">成就 <span class="red-dot"></span></button>
+        <button class="help-tab" data-tab="collection">收集册 <span class="red-dot"></span></button>
+      </div>
+      <div class="help-panel active" data-panel="achievement">
+        <h2>成就</h2>
+        <div id="achievement-list"></div>
+        <div id="achievement-pagination" class="pagination">
+          <button id="achievement-prev" class="page-btn">&lt;</button>
+          <span id="achievement-page-info" class="page-info"></span>
+          <button id="achievement-next" class="page-btn">&gt;</button>
+        </div>
+      </div>
+      <div class="help-panel" data-panel="collection">
+        <h2>收集册 <span id="collection-count" class="milestone-highlight collection-count-text"></span></h2>
+        <div id="collection-progress">
+          <div id="collection-progress-track">
+            <div id="collection-progress-fill"></div>
+            <div id="collection-progress-chests"></div>
+            <span id="collection-progress-label">0</span>
+          </div>
+        </div>
+        <div id="collection-grid"></div>
+        <div id="collection-pagination" class="pagination">
+          <button id="collection-prev" class="page-btn">&lt;</button>
+          <span id="collection-page-info" class="page-info"></span>
+          <button id="collection-next" class="page-btn">&gt;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 任务弹窗：起卦 / 观象 / 定数 / 市易 / 实录 / 归藏 / 每日签到 -->
+  <div id="tasks-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content tasks-modal-content">
+      <button class="btn-x" id="tasks-cancel" title="关闭（Esc）">&times;</button>
+      <div class="help-tabs">
+        <button class="help-tab active ts-main-tab ts-line-tab" data-ts-main-tab="qigua">起卦 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="guanxiang">观象 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="dingshu">定数 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="shiyi">市易 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="shilu">实录 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="guizang">归藏 <span class="red-dot"></span></button>
+        <button class="help-tab ts-main-tab ts-line-tab" data-ts-main-tab="daily">每日签到 <span class="red-dot"></span></button>
+      </div>
+      <!-- 起卦面板 -->
+      <div class="help-panel active ts-main-panel" data-ts-main-panel="qigua">
+        <div id="ts-list-qigua" class="ts-list"></div>
+      </div>
+      <!-- 观象面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="guanxiang">
+        <div id="ts-list-guanxiang" class="ts-list"></div>
+      </div>
+      <!-- 定数面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="dingshu">
+        <div id="ts-list-dingshu" class="ts-list"></div>
+      </div>
+      <!-- 市易面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="shiyi">
+        <div id="ts-list-shiyi" class="ts-list"></div>
+      </div>
+      <!-- 实录面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="shilu">
+        <div id="ts-list-shilu" class="ts-list"></div>
+      </div>
+      <!-- 归藏面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="guizang">
+        <div id="ts-list-guizang" class="ts-list"></div>
+      </div>
+      <!-- 每日签到面板 -->
+      <div class="help-panel ts-main-panel" data-ts-main-panel="daily">
+        <h2>每日签到任务</h2>
+        <p class="hint">每日 0 点重置完成状态</p>
+        <div id="daily-task-list" class="ts-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 卦象详情弹窗 -->
+  <div id="hexagram-detail-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content hexagram-detail-content">
+      <button class="btn-x" id="hexagram-detail-cancel" title="关闭（Esc）">&times;</button>
+      <h2 id="hexagram-detail-title">—</h2>
+      <div id="hexagram-detail-daxiang" class="hexagram-detail-section"></div>
+      <div id="hexagram-detail-benjing" class="hexagram-detail-section"></div>
+      <button class="btn-close btn-window" id="hexagram-detail-close">收下</button>
+    </div>
+  </div>
+
+  <!-- 健康游戏忠告弹窗（首次访问） -->
+  <div id="health-notice-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content health-notice-content">
+      <h2>健康游戏忠告</h2>
+      <div class="health-notice-body">
+        <p>抵制不良游戏，拒绝盗版游戏。</p>
+        <p>注意自我保护，谨防受骗上当。</p>
+        <p>适度游戏益脑，沉迷游戏伤身。</p>
+        <p>合理安排时间，享受健康生活。</p>
+      </div>
+      <div class="modal-actions">
+        <button id="health-notice-confirm" class="btn-success btn-window">我已知晓</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 新手引导弹窗（首次访问，防沉迷后触发） -->
+  <div id="onboarding-modal" class="modal" role="dialog" aria-modal="true">
+    <div class="modal-content onboarding-content">
+      <button class="onboarding-skip-link" id="onboarding-skip" title="跳过引导">跳过</button>
+      <div class="onboarding-progress">
+        <span id="onboarding-step-indicator">1 / 6</span>
+      </div>
+      <div class="onboarding-step active" data-step="0">
+        <div class="onboarding-emoji">🎋</div>
+        <h2>抽签得铜币</h2>
+        <p>点击主界面签筒抽签，随机获得一枚八卦铜币或太极币。</p>
+        <p class="hint">左键抽一次，右键可抽十次。</p>
+      </div>
+      <div class="onboarding-step" data-step="1">
+        <div class="onboarding-emoji">🎡</div>
+        <h2>投币转盘</h2>
+        <p>三枚同属性铜币可获得一次转盘机会，太极币为任意属性。点「转盘」按钮，每次自动投 3 枚铜币旋转奖励转盘。</p>
+        <p class="hint">铜币不足时无法旋转，先去抽签。</p>
+      </div>
+      <div class="onboarding-step" data-step="2">
+        <div class="onboarding-emoji">🪙</div>
+        <h2>赢得贝筹</h2>
+        <p>转盘结果按等级发放贝筹：丙等 1、乙等 3、甲等 5、至尊 10。</p>
+        <p class="hint">不同等级概率不同，丙等最常见。</p>
+      </div>
+      <div class="onboarding-step" data-step="3">
+        <div class="onboarding-emoji">🎲</div>
+        <h2>机缘挑战</h2>
+        <p>转盘抽中「机缘」时进入机缘转盘，可能触发任务挑战。</p>
+        <p>完成挑战：获得甲等（5 贝筹）+ 1 枚太极币。</p>
+        <p>放弃挑战：获得乙等（3 贝筹）。</p>
+        <p class="hint">转十次累计的机缘可合并挑战。</p>
+      </div>
+      <div class="onboarding-step" data-step="4">
+        <div class="onboarding-emoji">🎁</div>
+        <h2>兑换奖励</h2>
+        <p>点「商城」按钮，用贝筹兑换自定义商品。</p>
+        <p class="hint">商品由你在设置中自定义。</p>
+      </div>
+      <div class="onboarding-step" data-step="5">
+        <div class="onboarding-emoji">⚙️</div>
+        <h2>自定义你的循环</h2>
+        <p>点「设置」自定义任务、里程碑奖励、商城商品，开启专属循环。</p>
+        <p class="hint">详细规则可在「设置 → 使用说明」随时查看。</p>
+      </div>
+      <div class="onboarding-actions">
+        <button id="onboarding-prev" class="btn-window onboarding-nav-btn" disabled>上一步</button>
+        <button id="onboarding-next" class="btn-success btn-window onboarding-nav-btn">下一步</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>

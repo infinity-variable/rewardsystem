@@ -1,0 +1,2333 @@
+/* ===== 基础重置与变量 ===== */
+@font-face {
+  font-family: 'LXGWWenKai';
+  src: url('font/LXGWWenKai-Medium.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  /* ===== 背景色 ===== */
+  --bg-primary: #ECEAE4;
+  --bg-secondary: #16213e;
+  --bg-card: #978373;
+
+  /* ===== 主题色（红） ===== */
+  --title-red: #A83E39;
+  --title-red-light: rgba(168, 62, 57, 0.1);
+
+  /* ===== 强调色 ===== */
+  --accent-green: #4ecca3;
+  --accent-blue: #3498db;
+  --accent-gold: #d4a712;
+  --accent-gold-light: rgba(226, 183, 20, 0.15);
+  --accent-gold-glow: rgba(226, 183, 20, 0.3);
+
+  /* ===== 文字色 ===== */
+  --text-primary: #eee;
+  --text-secondary: #aaa;
+  --text-dark: #000;
+  --text-dark-alt: #1a1a2e;
+  --text-white: #fff;
+  --text-light-gray: #ddd;
+  --text-disabled: #888;
+
+  /* ===== 按钮禁用色 ===== */
+  --btn-disabled-bg: #555;
+  --btn-disabled-hover-bg: #777;
+
+  /* ===== 按钮底图 ===== */
+  --btn-bg-window: url('img/windowbuttonbackground.png');
+  --btn-bg-coin: url('img/buttonbackgroundcoin.png');
+  --btn-bg-action: url('img/buttenbackground.png');
+  --btn-bg-item: url('img/item.png');
+  --btn-bg-box-closed: url('img/boxclose.png');
+  --btn-bg-box-open: url('img/boxopen.png');
+
+  /* ===== 其他背景图 ===== */
+  --bg-modal: url('img/windowbackground.png');
+  --bg-textfield-long: url('img/textfieldlong.png');
+  --bg-textfield-medium: url('img/textfieldmedium.png');
+  --bg-textfield-short: url('img/textfieldshort.png');
+  --bg-textfield-extrashort: url('img/textfieldextrashort.png');
+  --bg-progressbar: url('img/progressbar.png');
+
+  /* ===== 按钮通用属性 ===== */
+  --btn-font-family: 'LXGWWenKai', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --btn-hover-filter: brightness(1.1);
+  --btn-bg-size: 100% 100%;
+  --btn-bg-repeat: no-repeat;
+
+  /* ===== 按钮文字色 ===== */
+  --btn-text-light: var(--text-white);
+  --btn-text-dark: var(--text-dark);
+
+  /* ===== 按钮边框与圆角 ===== */
+  --btn-border-transparent: 2px solid transparent;
+  --btn-border-outline: 2px solid var(--title-red);
+  --btn-radius-sharp: 0;
+  --btn-radius-circle: 50%;
+
+  /* ===== 透明遮罩与阴影色 ===== */
+  --overlay-bg: rgba(0, 0, 0, 0.7);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --context-shadow: rgba(0, 0, 0, 0.3);
+
+  /* ===== 白色透明系列（边框/背景） ===== */
+  --border-light: rgba(255, 255, 255, 0.3);
+  --border-light-hover: rgba(255, 255, 255, 0.5);
+  --bg-light-transparent: rgba(255, 255, 255, 0.1);
+  --bg-light-transparent-hover: rgba(255, 255, 255, 0.25);
+
+  /* ===== 阴影与圆角 ===== */
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  --radius: 12px;
+
+  /* ===== 道具系统色 ===== */
+  --talisman-bg: #FFD700;       /* 符箓黄底 */
+  --talisman-text: #A83E39;     /* 符箓红字 */
+  --fragment-bg-from: #C8C8C8; /* 币胚渐变起 */
+  --fragment-bg-to: #8A8A8A;    /* 币胚渐变止 */
+  --fragment-text: #2A2A2A;     /* 币胚文字 */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'LXGWWenKai', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+/* ===== 主界面 ===== */
+#main-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+  padding: 24px;
+  max-width: 480px;
+  width: 100%;
+}
+
+#shop-btn,
+#settings-btn,
+#lottery-btn,
+#achievement-btn,
+#task-btn {
+  background-color: transparent;
+}
+#shop-btn:hover,
+#settings-btn:hover,
+#lottery-btn:hover,
+#achievement-btn:hover,
+#task-btn:hover { filter: var(--btn-hover-filter); }
+
+/* ===== 铜币信息按钮（积分/铜币共用） ===== */
+.info-coin-btn {
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: var(--btn-font-family);
+  color: var(--btn-text-dark);
+  background: transparent;
+  background-image: var(--btn-bg-coin);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  padding: 4px 20px 0 20px;
+  border-radius: var(--btn-radius-sharp);
+  border: var(--btn-border-transparent);
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.info-coin-btn:hover { filter: var(--btn-hover-filter); }
+
+.btn-icon {
+  width: 36px;
+  height: 36px;
+  vertical-align: middle;
+  margin-right: 4px;
+  position: relative;
+  top: 0;
+  left: -10px;
+  z-index: 2;
+}
+
+#info-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.coin-info-section {
+  margin-bottom: 16px;
+  text-align: left;
+}
+.coin-info-section h3 {
+  color: var(--title-red);
+  margin-bottom: 6px;
+  font-size: 1rem;
+}
+.coin-info-section p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* ===== 签筒 ===== */
+#lot-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+  user-select: none;
+}
+
+#lot-container:hover { transform: scale(1.05); }
+#lot-container:active { transform: scale(0.95); }
+
+#lot-img {
+  width: 240px;
+  height: auto;
+  border-radius: 8px;
+}
+
+#lot-label {
+  margin-top: 8px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+/* ===== 操作按钮 ===== */
+#action-buttons {
+  display: flex;
+  gap: 39px;
+}
+
+#action-buttons button {
+  padding: 20px 28px;
+  font-size: 1rem;
+  font-weight: bold;
+  font-family: var(--btn-font-family);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: all 0.2s;
+  background-image: var(--btn-bg-action);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  color: var(--btn-text-dark);
+}
+
+/* 主页下方四个按钮（设置/商城/转盘/成就）尺寸按背景图同比例 0.6426 */
+#action-buttons button {
+  width: 75px;
+  height: 90px;
+}
+
+/* ===== 罐子区域 ===== */
+#spin-buttons {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+#spin-btn,
+#spin-ten-btn {
+  font-size: 1.1rem;
+  font-weight: bold;
+  padding: 14px 32px;
+  transition: all 0.2s;
+}
+#spin-btn:hover:not(:disabled),
+#spin-ten-btn:hover:not(:disabled) { filter: var(--btn-hover-filter); }
+#spin-btn:disabled,
+#spin-ten-btn:disabled {
+  background: var(--btn-disabled-bg);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+/* ===== 弹窗通用 ===== */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: var(--overlay-bg);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+.modal.active { display: flex; }
+
+.modal-content {
+  position: relative;
+  background: transparent;
+  background-image: var(--bg-modal);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  border-radius: 0;
+  padding: 24px;
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+  border: none;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 16px;
+  color: var(--title-red);
+}
+
+.modal-content .hint {
+  text-align: center;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}
+
+/* ===== 健康游戏忠告弹窗 ===== */
+.health-notice-content {
+  max-width: 420px;
+  text-align: center;
+}
+
+.health-notice-body {
+  margin: 8px 0 20px;
+  line-height: 2;
+  color: var(--text-dark);
+  font-size: 1rem;
+}
+
+.health-notice-body p {
+  margin: 4px 0;
+}
+
+/* ===== 数据备份按钮区 ===== */
+.data-backup-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+/* ===== 窗口风格按钮通用类 ===== */
+.btn-window {
+  background-image: var(--btn-bg-window);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  color: var(--btn-text-light);
+  border: none;
+  border-radius: var(--btn-radius-sharp);
+  cursor: pointer;
+  font-family: var(--btn-font-family);
+}
+.btn-window:hover { filter: var(--btn-hover-filter); }
+
+.btn-close {
+  display: block;
+  margin: 16px auto 0;
+  padding: 10px 32px;
+  font-size: 1rem;
+}
+
+.btn-success {
+  padding: 10px 24px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.btn-danger {
+  padding: 10px 24px;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+
+.btn-cancel {
+  padding: 10px 24px;
+  background: var(--btn-disabled-bg);
+  color: var(--btn-text-light);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+  font-family: var(--btn-font-family);
+}
+.btn-cancel:hover { background: var(--btn-disabled-hover-bg); }
+
+/* ===== 兑换弹窗 ===== */
+#coin-select {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.coin-select-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 4px 4px;
+  background: transparent;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.coin-select-item:hover { border-color: var(--title-red); }
+.coin-select-item.selected { border-color: var(--title-red); background: var(--accent-gold-light); }
+.coin-select-item.zero { opacity: 0.4; cursor: not-allowed; }
+
+.coin-select-item .coin-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--btn-radius-sharp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  padding: 2px;
+}
+
+.coin-select-item .coin-char {
+  width: 44px;
+  height: 44px;
+  font-size: 1.3rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-light);
+}
+
+.coin-select-item .coin-count {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.75rem;
+  color: var(--title-red);
+  font-weight: bold;
+}
+
+.coin-select-item .coin-name {
+  color: var(--text-dark);
+  font-size: 0.8rem;
+}
+
+
+
+#quantity-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+#quantity-section label { font-size: 0.95rem; }
+
+#qty-display {
+  font-size: 1.3rem;
+  font-weight: bold;
+  min-width: 28px;
+  text-align: center;
+  color: var(--title-red);
+}
+
+.qty-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--btn-radius-circle);
+  border: var(--btn-border-outline);
+  background: transparent;
+  color: var(--title-red);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+  font-family: var(--btn-font-family);
+}
+.qty-btn:hover { background: var(--title-red); color: var(--text-dark-alt); }
+
+#backpack-jar-info {
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+#backpack-confirm {
+  padding: 10px 24px;
+  background: var(--title-red);
+  color: var(--text-dark-alt);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95rem;
+}
+#backpack-confirm:hover:not(:disabled) { background: var(--accent-gold); }
+#backpack-confirm:disabled { background: var(--btn-disabled-bg); color: var(--text-disabled); cursor: not-allowed; }
+
+/* #backpack-cancel 已改为 .btn-x 样式，不再单独定义 */
+
+/* ===== 转盘弹窗 ===== */
+.wheel-modal .modal-content {
+  max-width: 380px;
+}
+
+.wheel-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+
+.wheel-pointer {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 20px solid var(--title-red);
+  z-index: 10;
+  filter: drop-shadow(0 2px 4px var(--shadow-color));
+}
+
+.wheel-wrapper canvas {
+  border-radius: 50%;
+  box-shadow: 0 0 20px var(--accent-gold-glow);
+  transition: transform 3s cubic-bezier(0.17, 0.67, 0.12, 0.99);
+}
+
+.result-display {
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-height: 36px;
+  margin: 12px 0;
+  color: var(--title-red);
+}
+
+#challenge-text {
+  text-align: center;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+  background: transparent;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+/* ===== 提示消息 ===== */
+.toast {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-100px);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  padding: 12px 24px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 2000;
+  transition: transform 0.3s ease;
+  font-size: 0.95rem;
+  border: 1px solid var(--title-red);
+}
+
+.toast.show {
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ===== 设置弹窗 ===== */
+.btn-x {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--btn-radius-circle);
+  background: var(--bg-light-transparent);
+  color: var(--text-light-gray);
+  font-size: 1.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+  line-height: 1;
+  font-family: var(--btn-font-family);
+}
+.btn-x:hover { background: var(--bg-light-transparent-hover); color: var(--text-white); border-color: var(--border-light-hover); }
+
+
+.settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.settings-field label {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+
+.settings-field input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border-radius: 0;
+  border: 2px solid transparent;
+  background: transparent;
+  background-image: var(--bg-textfield-long);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: var(--text-dark);
+}
+
+.settings-field input:focus {
+  outline: none;
+  border-color: var(--title-red);
+}
+
+.settings-field input[type="number"] {
+  background-image: var(--bg-textfield-short);
+}
+
+/* ===== 里程碑 ===== */
+.milestone-section {
+  margin-top: 20px;
+  border-top: 1px solid var(--title-red);
+  padding-top: 16px;
+}
+
+.milestone-section h3 {
+  color: var(--title-red);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-add-milestone {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--btn-radius-circle);
+  border: var(--btn-border-outline);
+  background: transparent;
+  color: var(--title-red);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s;
+  font-family: var(--btn-font-family);
+}
+
+.btn-add-milestone:hover {
+  background: var(--title-red);
+  color: var(--bg-primary);
+}
+
+.milestone-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+.milestone-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.milestone-input {
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  font-family: var(--btn-font-family);
+  border-radius: 0;
+  border: 2px solid transparent;
+  background: transparent;
+  background-image: var(--bg-textfield-medium);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  color: var(--text-dark);
+}
+
+.milestone-input:focus {
+  outline: none;
+  border-color: var(--title-red);
+}
+
+.milestone-count {
+  width: 70px;
+  background-image: var(--bg-textfield-short);
+}
+
+.milestone-reward {
+  flex: 1;
+  min-width: 80px;
+  background-image: var(--bg-textfield-medium);
+}
+
+.milestone-reward.shop-item-name-input {
+  background-image: var(--bg-textfield-long);
+}
+
+.task-name-input {
+  flex: 1;
+  min-width: 80px;
+}
+
+.task-unit-input {
+  width: 35px;
+  background-image: var(--bg-textfield-extrashort);
+  text-align: center;
+}
+
+.shop-item-emoji-input {
+  width: 50px;
+  text-align: center;
+  background-image: var(--bg-textfield-short);
+}
+
+.milestone-del {
+  width: 24px;
+  height: 24px;
+  border-radius: var(--btn-radius-circle);
+  border: 1px solid var(--title-red);
+  background: transparent;
+  color: var(--title-red);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: all 0.2s;
+}
+
+.milestone-del:hover {
+  background: var(--title-red);
+  color: var(--text-white);
+}
+
+.milestone-edit-btn {
+  padding: 2px 10px;
+  border-radius: 12px;
+  border: 1px solid var(--title-red);
+  background: transparent;
+  color: var(--title-red);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.milestone-edit-btn:hover {
+  background: var(--title-red);
+  color: var(--text-white);
+}
+
+.milestone-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ===== 里程碑达成弹窗 ===== */
+.milestone-modal-content {
+  text-align: center;
+  max-width: 360px;
+}
+
+.milestone-trophy {
+  font-size: 4rem;
+  margin-bottom: 8px;
+  animation: bounce 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+}
+
+.milestone-modal-text {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin: 8px 0;
+}
+
+.milestone-highlight {
+  color: var(--title-red);
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+/* ===== 抽签结果弹窗 ===== */
+.draw-modal-content {
+  text-align: center;
+  max-width: 470px;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+
+.draw-coin-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 20px 15px 12px 15px;
+  margin: 0 auto 16px;
+  width: fit-content;
+  border-radius: 20px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.draw-coin-wrapper:hover {
+  border-color: var(--title-red);
+}
+
+.draw-coin-item {
+  width: 120px;
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  padding: 4px;
+}
+
+.draw-coin-symbol {
+  font-size: 2.6rem;
+  line-height: 1;
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  border: 2px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: coinDrop 0.5s ease;
+}
+
+@keyframes coinDrop {
+  0% { transform: translateY(-60px) scale(0.3); opacity: 0; }
+  60% { transform: translateY(10px) scale(1.1); opacity: 1; }
+  100% { transform: translateY(0) scale(1); }
+}
+
+.draw-coin-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--title-red);
+  margin-bottom: 4px;
+}
+
+.draw-coin-name:empty {
+  display: none;
+}
+
+.draw-hexagram {
+  font-size: 1.7rem;
+  font-weight: bold;
+  color: var(--text-dark);
+  margin-top: 8px;
+  margin-bottom: 0;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+/* 诸事皆宜翻倍标记 */
+.draw-doubled-tag {
+  font-size: 0.95rem;
+  font-weight: normal;
+  color: var(--title-red);
+  background: rgba(255, 215, 0, 0.18);
+  border: 1px solid var(--talisman-bg);
+  border-radius: 6px;
+  padding: 1px 8px;
+}
+
+/* ===== 贝筹商城 ===== */
+.shop-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.shop-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 4px 4px;
+  background: transparent;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.shop-item.selected {
+  border-color: var(--title-red);
+  background: var(--title-red-light);
+}
+
+.shop-item.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.shop-item-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--btn-radius-sharp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  font-size: 1.8rem;
+  color: var(--text-dark);
+}
+/* 商品兑换限制标记：icon 右下角小字（1=只能换一次 / ∞=无限次） */
+.shop-item-limit-mark {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  font-size: 0.7rem;
+  color: var(--title-red);
+  font-weight: bold;
+  text-shadow: 0 1px 2px rgba(255,255,255,0.8);
+  line-height: 1;
+}
+
+.shop-item-name {
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+.shop-item-cost {
+  color: var(--title-red);
+  font-size: 0.75rem;
+  font-weight: bold;
+}
+
+/* 「只能换一次」标签 */
+.shop-item-once {
+  font-size: 0.65rem;
+  color: var(--text-muted, #888);
+  background: rgba(0,0,0,0.06);
+  padding: 1px 6px;
+  border-radius: 4px;
+  margin-top: 2px;
+}
+.shop-item.claimed {
+  opacity: 0.55;
+  cursor: default;
+}
+.shop-item.claimed .shop-item-once {
+  color: var(--title-red);
+  background: var(--title-red-light);
+}
+
+/* 设置页：商品行兑换限制单选 */
+.shop-item-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 0;
+  border-bottom: 1px dashed rgba(0,0,0,0.08);
+}
+.shop-item-line1 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+.shop-item-line2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-left: 2px;
+}
+.shop-limit-label {
+  font-size: 0.78rem;
+  color: var(--text-muted, #666);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  white-space: nowrap;
+}
+.shop-limit-label input[type="radio"] {
+  margin: 0;
+  cursor: pointer;
+}
+.shop-limit-label.editable {
+  color: var(--text-dark);
+  cursor: pointer;
+}
+
+/* ===== 贝筹流水 ===== */
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.btn-copy {
+  padding: 8px 20px;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.log-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  background: transparent;
+  border-bottom: 1px solid var(--title-red);
+  gap: 10px;
+  font-size: 0.85rem;
+}
+
+.log-date {
+  color: var(--text-secondary);
+  white-space: pre-line;
+  min-width: 80px;
+  max-width: 90px;
+  word-break: break-all;
+}
+
+.log-desc {
+  flex: 1;
+  color: var(--text-dark);
+}
+
+.log-invested {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  white-space: nowrap;
+  min-width: 50px;
+  text-align: center;
+}
+
+.log-amount {
+  font-weight: bold;
+  min-width: 60px;
+  text-align: right;
+}
+
+.log-amount.positive { color: var(--accent-green); }
+.log-amount.negative { color: var(--title-red); }
+.log-amount.zero { color: var(--title-red); }
+
+/* ===== 里程碑进度条 ===== */
+#milestone-progress {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 8px;
+}
+
+#progress-bar-track {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  background: rgba(0,0,0,0.08);
+  border-radius: 14px;
+  overflow: visible;
+  border: none;
+}
+
+#progress-bar-fill {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  max-width: calc(100% - 6px);
+  height: calc(100% - 6px);
+  background: var(--title-red);
+  border-radius: 12px;
+  transition: width 0.5s ease;
+  min-width: 0;
+}
+
+#progress-label {
+  position: absolute;
+  top: calc(50% - 18px);
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: var(--text-dark);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 2px var(--shadow-color);
+}
+
+#progress-label::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 6px solid var(--text-dark);
+  vertical-align: middle;
+  margin-right: 4px;
+}
+
+#progress-chests {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+
+.chest-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.chest-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--btn-radius-sharp);
+  border: none;
+  background: transparent;
+  background-image: var(--btn-bg-box-closed);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  font-size: 1.2rem;
+  cursor: default;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  margin-top: -6px;
+  box-shadow: none;
+}
+
+.chest-btn.achieved {
+  cursor: pointer;
+}
+
+.chest-btn.achieved:hover {
+  transform: scale(1.15);
+  box-shadow: none;
+}
+
+.chest-btn.claimed {
+  background-image: var(--btn-bg-box-open);
+}
+
+.chest-label {
+  font-size: 0.7rem;
+  color: var(--text-disabled);
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+/* 宝箱右上角红点（首页里程碑 + 收集册） */
+.chest-red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  background: var(--title-red);
+  border-radius: 50%;
+  border: 1px solid #fff;
+  z-index: 3;
+  pointer-events: none;
+  animation: pulse-red 1.5s infinite;
+}
+@keyframes pulse-red {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.7; }
+}
+
+/* ===== 收集册进度条（高度为主界面一半） ===== */
+#collection-progress {
+  margin: 6px 0 25px 0;
+}
+#collection-progress-track {
+  position: relative;
+  width: 100%;
+  height: 14px;                 /* 主界面 28px 的一半 */
+  background: rgba(0,0,0,0.08);
+  border-radius: 7px;
+  overflow: visible;
+}
+#collection-progress-fill {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  max-width: calc(100% - 4px);
+  height: calc(100% - 4px);
+  background: var(--title-red);
+  border-radius: 6px;
+  transition: width 0.5s ease;
+  min-width: 0;
+}
+#collection-progress-label {
+  position: absolute;
+  top: calc(50% - 14px);
+  transform: translateY(-50%);
+  font-size: 0.65rem;
+  color: var(--text-dark);
+  white-space: nowrap;
+  pointer-events: none;
+  text-shadow: 0 1px 2px var(--shadow-color);
+}
+#collection-progress-label::before {
+  content: '';
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-left: 3px solid transparent;
+  border-right: 3px solid transparent;
+  border-top: 5px solid var(--text-dark);
+  vertical-align: middle;
+  margin-right: 3px;
+}
+#collection-progress-chests {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100%;
+}
+/* 收集册宝箱（缩小版） */
+.collection-chest-btn {
+  position: relative;
+  width: 20px;                   /* 主界面 40px 的一半 */
+  height: 20px;
+  border-radius: var(--btn-radius-sharp);
+  border: none;
+  background: transparent;
+  background-image: var(--btn-bg-box-closed);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  cursor: default;
+  transition: all 0.3s ease;
+  margin-top: -3px;
+}
+.collection-chest-btn.achieved {
+  cursor: pointer;
+}
+.collection-chest-btn.achieved:hover {
+  transform: scale(1.15);
+}
+.collection-chest-btn.claimed {
+  background-image: var(--btn-bg-box-open);
+}
+
+/* 收集册新解锁卦红点 */
+.collection-item {
+  position: relative;
+}
+.hex-red-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: var(--title-red);
+  border-radius: 50%;
+  border: 1px solid #fff;
+  z-index: 3;
+  animation: pulse-red 1.5s infinite;
+}
+
+/* ===== 备份提醒条 ===== */
+.backup-reminder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: linear-gradient(90deg, #fff3cd, #ffe4a8);
+  border-bottom: 2px solid #e0a800;
+  color: #7a5b00;
+  font-size: 0.85rem;
+  position: relative;
+  z-index: 50;
+}
+.backup-reminder.hidden { display: none; }
+.backup-reminder-text { font-weight: bold; }
+.backup-reminder .btn-window { padding: 4px 12px; font-size: 0.8rem; }
+.backup-reminder-close {
+  background: transparent;
+  border: none;
+  color: #7a5b00;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+}
+.backup-reminder-close:hover { color: #5a3f00; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 480px) {
+  #main-screen { padding: 16px; gap: 16px; }
+  #lot-img { width: 80px; }
+  #coin-select { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .coin-select-item .coin-icon { width: 36px; height: 36px; font-size: 1.1rem; border-radius: 50%; }
+  .wheel-wrapper canvas { width: 260px; height: 260px; }
+  #spin-btn { padding: 12px 36px; font-size: 1rem; }
+}
+
+@media (max-width: 360px) {
+  #coin-select { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* ===== 成就界面 ===== */
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.achievement-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 4px 4px;
+  background: transparent;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+
+.achievement-item.achieved {
+  border-color: var(--title-red);
+  background: var(--title-red-light);
+}
+
+.achievement-item.hidden {
+  opacity: 0.6;
+}
+
+.achievement-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: var(--btn-radius-sharp);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  padding: 2px;
+}
+
+.achievement-emoji {
+  font-size: 1.8rem;
+}
+
+.achievement-name {
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.achievement-desc {
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.achievement-progress {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.75rem;
+  color: var(--title-red);
+  font-weight: bold;
+}
+
+/* 成就奖励标签与领取按钮 */
+.ach-reward-label {
+  font-size: 0.7rem;
+  color: var(--text-muted, #666);
+  text-align: center;
+}
+.ach-claim-btn {
+  padding: 3px 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  margin-top: 2px;
+}
+.ach-claimed-tag {
+  font-size: 0.7rem;
+  color: var(--text-disabled);
+  margin-top: 2px;
+}
+/* 成就未领取奖励红点 */
+.ach-red-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: var(--title-red);
+  border-radius: 50%;
+  border: 1px solid #fff;
+  z-index: 3;
+  animation: pulse-red 1.5s infinite;
+}
+
+#achievement-btn {
+  background-color: transparent;
+  position: relative;
+}
+#achievement-btn:hover { filter: var(--btn-hover-filter); }
+
+#achievement-btn .red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--title-red);
+  display: none;
+}
+#achievement-btn .red-dot.visible {
+  display: block;
+}
+
+/* 任务按钮复用同款小红点 */
+#task-btn { position: relative; }
+#task-btn .red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--title-red);
+  display: none;
+}
+#task-btn .red-dot.visible {
+  display: block;
+}
+
+/* 新手任务线 tab 上的小红点 */
+.ts-main-tab { position: relative; }
+.ts-main-tab .red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--title-red);
+  display: none;
+  border: 1px solid #fff;
+}
+.ts-main-tab .red-dot.visible {
+  display: block;
+  animation: pulse-red 1.5s infinite;
+}
+
+/* 成就/收集册 tab 上的小红点 */
+.help-tab[data-tab="achievement"],
+.help-tab[data-tab="collection"] {
+  position: relative;
+}
+.help-tab[data-tab="achievement"] .red-dot,
+.help-tab[data-tab="collection"] .red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--title-red);
+  display: none;
+  border: 1px solid #fff;
+}
+.help-tab[data-tab="achievement"] .red-dot.visible,
+.help-tab[data-tab="collection"] .red-dot.visible {
+  display: block;
+  animation: pulse-red 1.5s infinite;
+}
+
+/* 荷包按钮（铜币按钮）与荷包内币胚 tab 的小红点 */
+#coin-info-btn { position: relative; }
+#coin-info-btn .red-dot,
+#backpack-modal .help-tab[data-bp-tab="fragment"] .red-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--title-red);
+  display: none;
+  border: 1px solid #fff;
+}
+#coin-info-btn .red-dot.visible,
+#backpack-modal .help-tab[data-bp-tab="fragment"] .red-dot.visible {
+  display: block;
+  animation: pulse-red 1.5s infinite;
+}
+#backpack-modal .help-tab[data-bp-tab="fragment"] { position: relative; }
+
+/* ===== 收集册界面 ===== */
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.collection-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 4px 4px 4px;
+  background: transparent;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+
+.collection-item.drawn {
+  opacity: 1;
+  border-color: var(--title-red);
+  background: var(--title-red-light);
+}
+
+.collection-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  padding: 4px;
+}
+
+.collection-icon-inner {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-light);
+  font-size: 1.5rem;
+  color: #000;
+}
+
+.collection-num {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--text-dark-alt);
+}
+
+/* ===== 新手引导 wizard ===== */
+.onboarding-content {
+  max-width: 440px;
+  text-align: center;
+  position: relative;
+}
+
+/* 跳过按钮：右上角纯文字 */
+.onboarding-skip-link {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--btn-font-family);
+  font-size: 0.9rem;
+  font-weight: normal;
+  cursor: pointer;
+  padding: 2px 4px;
+}
+
+.onboarding-skip-link:hover {
+  color: var(--text-dark-alt);
+}
+
+.onboarding-progress {
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.onboarding-step {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 0 16px;
+}
+
+.onboarding-step.active {
+  display: flex;
+}
+
+.onboarding-emoji {
+  font-size: 3.5rem;
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.onboarding-step h2 {
+  margin-bottom: 12px;
+}
+
+.onboarding-step p {
+  margin: 6px 0;
+  line-height: 1.7;
+  color: var(--text-dark);
+}
+
+.onboarding-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+/* 上一步 / 下一步等宽 */
+.onboarding-nav-btn {
+  min-width: 100px;
+  padding: 10px 24px;
+  font-size: 0.95rem;
+}
+
+.onboarding-actions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ===== 使用说明 Tab ===== */
+.help-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  border-bottom: 2px solid var(--border-light);
+}
+
+/* 成就弹窗顶部有关闭按钮，Tab 需让出右侧空间 */
+#achievement-modal .help-tabs {
+  padding-right: 40px;
+}
+
+.help-tab {
+  padding: 8px 20px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  font-family: var(--btn-font-family);
+  font-size: 1rem;
+  color: var(--text-secondary);
+}
+
+.help-tab.active {
+  color: var(--text-dark);
+  border-bottom-color: var(--title-red);
+  font-weight: bold;
+}
+
+.help-panel {
+  display: none;
+}
+
+.help-panel.active {
+  display: block;
+}
+
+/* 快速上手卡片 */
+.quick-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  margin: 12px 0;
+  padding: 12px;
+  background: var(--card-bg, rgba(0,0,0,0.03));
+  border-radius: var(--radius);
+  border: 1px solid var(--border-light);
+  text-align: left;
+}
+
+.quick-step-num {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--title-red);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.quick-step-body h3 {
+  margin: 0 0 4px;
+  font-size: 1rem;
+  color: var(--title-red);
+}
+
+.quick-step-body p {
+  margin: 0;
+  color: var(--text-dark);
+  line-height: 1.6;
+  font-size: 0.92rem;
+}
+
+/* ===== 关于模块 ===== */
+.about-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-light);
+  text-align: center;
+}
+
+.about-section h3 {
+  margin-bottom: 4px;
+}
+
+.about-links {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+/* 单个链接：item.png 背景 + 44x44 尺寸 */
+.about-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  border-radius: var(--btn-radius-sharp);
+  overflow: hidden;
+  transition: transform 0.15s ease;
+}
+
+.about-link:hover {
+  transform: scale(1.1);
+}
+
+.about-link img {
+  width: 80%;
+  height: 80%;
+  object-fit: contain;
+}
+
+.collection-name {
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-all;
+}
+
+/* ===== 翻页按键 ===== */
+.page-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--btn-radius-circle);
+  border: var(--btn-border-outline);
+  background: transparent;
+  color: var(--title-red);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+.page-btn:hover:not(:disabled) {
+  background: var(--title-red);
+  color: var(--text-white);
+}
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* ===== 签筒右键菜单 ===== */
+#lot-context-menu {
+  position: fixed;
+  z-index: 10000;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-repeat: var(--btn-bg-repeat);
+  border: none;
+  border-radius: var(--btn-radius-sharp);
+  padding: 4px 0;
+  min-width: 80px;
+  box-shadow: none;
+  display: none;
+}
+
+.lot-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  transition: border 0.15s;
+  border: 2px solid transparent;
+  margin: 0 3px;
+}
+
+.lot-menu-item:hover {
+  border: 2px solid var(--title-red);
+}
+
+/* ===== 十连抽签网格 ===== */
+.draw-ten-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.spin-tier-char {
+  border-radius: 6px;
+}
+
+.spin-item-sub {
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+/* ===== 抽签弹窗大象传 ===== */
+.draw-daxiang {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: var(--title-red-light);
+  border-left: 3px solid var(--title-red);
+  padding: 8px 12px;
+  margin: 0 0 16px 0;
+  border-radius: 4px;
+  text-align: left;
+  line-height: 1.6;
+  min-height: 1.2em;
+}
+
+.draw-daxiang:empty {
+  display: none;
+}
+
+/* ===== 卦象详情弹窗 ===== */
+.hexagram-detail-content {
+  max-width: 520px;
+  text-align: left;
+}
+
+.hexagram-detail-section {
+  font-size: 0.95rem;
+  color: var(--text-dark);
+  line-height: 1.8;
+  margin-bottom: 16px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  text-align: left;
+}
+
+.hexagram-detail-section:empty {
+  display: none;
+}
+
+#hexagram-detail-daxiang {
+  background: var(--title-red-light);
+  border-left: 3px solid var(--title-red);
+  padding: 10px 14px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#hexagram-detail-benjing {
+  padding: 0 4px;
+}
+
+/* ===== 工具类（替代内联样式） ===== */
+.hidden {
+  display: none;
+}
+
+/* 分页栏：居中 flex + 间距 */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+/* 分页信息文字 */
+.page-info {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  line-height: 36px;
+}
+
+/* 居中换行 flex 容器 */
+.center-row-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* 居中单行 flex 容器 */
+.center-row {
+  display: flex;
+  justify-content: center;
+}
+
+/* 居中单行 flex 容器（带上边距） */
+.center-row-top {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+/* 两端对齐 flex 容器 */
+.between-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 居中带间距 flex 容器 */
+.center-gap-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+}
+
+/* 结果贝筹数值文字 */
+.result-points {
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: var(--title-red);
+  margin: 12px 0;
+}
+
+/* 红色居中标题 */
+.title-red-center {
+  text-align: center;
+  color: var(--title-red);
+}
+
+/* 居中块级按钮 */
+.btn-center-block {
+  display: block;
+  margin: 16px auto 0;
+}
+
+/* 挑战说明文字区 */
+.challenge-text {
+  text-align: center;
+  margin-bottom: 12px;
+  background: transparent;
+  padding: 12px;
+}
+
+/* 挑战展示项容器 */
+.challenge-items {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* ===== 数据分析看板 ===== */
+.analytics-modal-content {
+  max-width: 720px;
+}
+
+.analytics-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.analytics-card {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 12px 14px;
+}
+
+.analytics-card h4 {
+  margin: 0 0 8px 0;
+  color: var(--title-red, #b91c1c);
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 4px;
+}
+
+.analytics-card p {
+  margin: 4px 0;
+  font-size: 0.88rem;
+  color: var(--text-secondary, #d4d4d8);
+}
+
+.analytics-card p b {
+  color: var(--text-primary, #fafafa);
+  font-weight: 600;
+}
+
+.analytics-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+.analytics-table th,
+.analytics-table td {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 8px;
+  text-align: left;
+}
+
+.analytics-table th {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary, #fafafa);
+}
+
+@media (max-width: 600px) {
+  .analytics-grid { grid-template-columns: 1fr; }
+}
+
+/* 成就恭喜列表 */
+.congrats-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+/* grid 居中对齐 */
+.grid-center {
+  justify-items: center;
+}
+
+/* 收集册计数文字 */
+.collection-count-text {
+  font-size: 0.9rem;
+}
+
+/* ===== 荷包页签（让出关闭按钮空间） ===== */
+#backpack-modal .help-tabs {
+  padding-right: 40px;
+}
+
+/* 通用道具网格（符箓/币胚共用容器） */
+.item-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+/* 道具卡片：与 coin-select-item 同尺寸但独立类，避免影响硬币圆圈 */
+.item-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 4px 4px 4px;
+  background: transparent;
+  border-radius: 8px;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.8rem;
+}
+.item-card:hover { border-color: var(--title-red); }
+.item-card.zero { opacity: 0.4; cursor: default; }
+.item-card.zero:hover { border-color: transparent; }
+
+/* 道具图标底（item.png 背景） */
+.item-square {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background-image: var(--btn-bg-item);
+  background-size: var(--btn-bg-size);
+  background-position: center;
+  background-repeat: var(--btn-bg-repeat);
+  padding: 2px;
+}
+
+/* 道具数量角标 */
+.item-count {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  font-size: 0.75rem;
+  color: var(--title-red);
+  font-weight: bold;
+}
+
+/* 道具全称（卡片下方） */
+.item-name {
+  color: var(--text-dark);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+/* ===== 符箓：黄底方块红字 ===== */
+.talisman-inner {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;            /* 方块，非圆 */
+  background: var(--talisman-bg);
+  color: var(--talisman-text);
+  font-size: 1.3rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* ===== 币胚：方块（区别于硬币圆圈与符箓黄块） ===== */
+.fragment-inner {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;            /* 方块，非圆 */
+  background: linear-gradient(135deg, var(--fragment-bg-from) 0%, var(--fragment-bg-to) 100%);
+  color: var(--fragment-text);
+  font-size: 1.1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+/* 币胚页展示（复用 item-card / item-square / fragment-inner） */
+.fragment-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0 4px;
+}
+
+/* ===== 悬浮使用说明 tooltip ===== */
+.item-tooltip {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-secondary);
+  color: var(--text-light-gray);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  line-height: 1.4;
+  white-space: normal;
+  width: max-content;
+  max-width: 190px;
+  text-align: center;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--title-red);
+}
+.item-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--title-red);
+}
+.item-card:hover .item-tooltip,
+.coin-select-item:hover .item-tooltip { opacity: 1; }
+
+/* ===== 任务弹窗 ===== */
+.tasks-modal-content {
+  max-width: 560px;
+}
+
+.ts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* 任务行 */
+.ts-row {
+  border: 1px solid var(--border-soft, rgba(0,0,0,0.1));
+  border-radius: var(--radius, 8px);
+  padding: 10px 12px;
+  background: var(--panel-bg, rgba(255,255,255,0.55));
+  transition: background 0.2s;
+}
+.ts-row.is-ready {
+  border-color: var(--talisman-bg);
+  background: rgba(255, 215, 0, 0.12);
+}
+.ts-row.is-claimed {
+  opacity: 0.55;
+  background: rgba(0,0,0,0.04);
+}
+
+.ts-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.ts-row-title {
+  font-weight: bold;
+  font-size: 1rem;
+  color: var(--text-dark);
+}
+.ts-progress {
+  font-size: 0.85rem;
+  font-weight: normal;
+  color: var(--text-muted, #666);
+  margin-left: 6px;
+}
+
+.ts-row-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.ts-reward-label {
+  font-size: 0.9rem;
+  color: var(--text-dark);
+}
+
+/* 任务行内小按钮（继承 .btn-success.btn-window 但更小） */
+.ts-row .btn-success.btn-window {
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+.ts-row .btn-success.btn-window:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(0.4);
+}
+/* 完成态对号按钮：高亮绿色、不可点击 */
+.ts-row .btn-success.btn-window.ts-goto-done {
+  cursor: default;
+  opacity: 1;
+  filter: none;
+}
+
+/* 新手任务子 Tab 容器 */
+#onboarding-tabs {
+  margin-bottom: 12px;
+}
+
