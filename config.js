@@ -100,8 +100,8 @@ export const CONFIG = {
   COLOR_TAIJI_TEXT: '#1a1a2e',
 
   // 图片路径
-  IMG_ITEM: 'img/item.png',
-  IMG_BAGUA: 'img/bagua.png',
+  IMG_ITEM: 'img/item.webp',
+  IMG_BAGUA: 'img/bagua.webp',
 
   // 本地存储键
   STORAGE_KEY: 'rewardWheelState',

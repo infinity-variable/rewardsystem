@@ -1,10 +1,5 @@
 /* ===== 基础重置与变量 ===== */
-@font-face {
-  font-family: 'LXGWWenKai';
-  src: url('font/LXGWWenKai-Medium.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+/* 字体由 jsDelivr CDN 提供（lxgw-wenkai-webfont），按字符分包加载，见 index.html 中的 <link> */
 
 :root {
   /* ===== 背景色 ===== */
@@ -37,23 +32,23 @@
   --btn-disabled-hover-bg: #777;
 
   /* ===== 按钮底图 ===== */
-  --btn-bg-window: url('img/windowbuttonbackground.png');
-  --btn-bg-coin: url('img/buttonbackgroundcoin.png');
-  --btn-bg-action: url('img/buttenbackground.png');
-  --btn-bg-item: url('img/item.png');
-  --btn-bg-box-closed: url('img/boxclose.png');
-  --btn-bg-box-open: url('img/boxopen.png');
+  --btn-bg-window: url('img/windowbuttonbackground.webp');
+  --btn-bg-coin: url('img/buttonbackgroundcoin.webp');
+  --btn-bg-action: url('img/buttenbackground.webp');
+  --btn-bg-item: url('img/item.webp');
+  --btn-bg-box-closed: url('img/boxclose.webp');
+  --btn-bg-box-open: url('img/boxopen.webp');
 
   /* ===== 其他背景图 ===== */
-  --bg-modal: url('img/windowbackground.png');
-  --bg-textfield-long: url('img/textfieldlong.png');
-  --bg-textfield-medium: url('img/textfieldmedium.png');
-  --bg-textfield-short: url('img/textfieldshort.png');
-  --bg-textfield-extrashort: url('img/textfieldextrashort.png');
-  --bg-progressbar: url('img/progressbar.png');
+  --bg-modal: url('img/windowbackground.webp');
+  --bg-textfield-long: url('img/textfieldlong.webp');
+  --bg-textfield-medium: url('img/textfieldmedium.webp');
+  --bg-textfield-short: url('img/textfieldshort.webp');
+  --bg-textfield-extrashort: url('img/textfieldextrashort.webp');
+  --bg-progressbar: url('img/progressbar.webp');
 
   /* ===== 按钮通用属性 ===== */
-  --btn-font-family: 'LXGWWenKai', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --btn-font-family: 'LXGW WenKai Medium', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   --btn-hover-filter: brightness(1.1);
   --btn-bg-size: 100% 100%;
   --btn-bg-repeat: no-repeat;
@@ -94,7 +89,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 body {
-  font-family: 'LXGWWenKai', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  font-family: 'LXGW WenKai Medium', 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
@@ -1152,8 +1147,8 @@ body {
 }
 
 .chest-btn {
-  width: 40px;
-  height: 40px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--btn-radius-sharp);
   border: none;
   background: transparent;
@@ -1166,7 +1161,7 @@ body {
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  margin-top: -6px;
+  margin-top: -9px;
   box-shadow: none;
 }
 
@@ -1780,7 +1775,7 @@ body {
   margin-top: 10px;
 }
 
-/* 单个链接：item.png 背景 + 44x44 尺寸 */
+/* 单个链接：item.webp 背景 + 44x44 尺寸 */
 .about-link {
   display: flex;
   align-items: center;
@@ -2141,7 +2136,7 @@ body {
 .item-card.zero { opacity: 0.4; cursor: default; }
 .item-card.zero:hover { border-color: transparent; }
 
-/* 道具图标底（item.png 背景） */
+/* 道具图标底（item.webp 背景） */
 .item-square {
   width: 60px;
   height: 60px;

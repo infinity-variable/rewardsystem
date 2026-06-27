@@ -42,7 +42,7 @@ export function drawWheel(canvas, sectors) {
     ctx.rotate(startAngle + sliceAngle / 2);
     ctx.textAlign = 'center';
     ctx.fillStyle = '#fff';
-    ctx.font = 'bold 14px "LXGWWenKai", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif';
+    ctx.font = 'bold 14px "LXGW WenKai Medium", "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif';
     ctx.shadowColor = 'rgba(0,0,0,0.5)';
     ctx.shadowBlur = 3;
     const textR = r * CONFIG.WHEEL_TEXT_RADIUS_RATIO;

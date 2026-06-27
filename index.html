@@ -4,8 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>奖励转盘系统</title>
+  <meta name="description" content="基于周易八卦的奖励转盘系统，通过抽签、投币、转盘玩法定制个人任务奖励，哄自己做该做的事。">
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" type="image/png" href="img/bagua.png">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Medium/result.css">
+  <link rel="icon" type="image/png" href="img/bagua.webp">
+
+  <!-- Cloudflare Web Analytics：无 cookie，看 PV/UV/来源 -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon='{"token": "872cf518c0274449934d9234faf50b91"}'></script>
+
+  <!-- Google Analytics 4：看漏斗/留存/事件 -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DVHTMLGF3K"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-DVHTMLGF3K');
+  </script>
 </head>
 <body>
   <!-- 备份提醒条 -->
@@ -18,12 +33,12 @@
   <!-- 主界面 -->
   <div id="main-screen">
     <div id="info-buttons">
-      <button id="coin-info-btn" class="info-coin-btn"><img src="img/package.png" class="btn-icon">铜币：<span id="coin-total-count">0</span><span class="red-dot"></span></button>
-      <button id="points-info-btn" class="info-coin-btn"><img src="img/point.png" class="btn-icon">贝筹：<span id="points">0</span></button>
+      <button id="coin-info-btn" class="info-coin-btn"><img src="img/package.webp" class="btn-icon">铜币：<span id="coin-total-count">0</span><span class="red-dot"></span></button>
+      <button id="points-info-btn" class="info-coin-btn"><img src="img/point.webp" class="btn-icon">贝筹：<span id="points">0</span></button>
     </div>
 
     <div id="lot-container" title="抽签">
-      <img id="lot-img" src="img/container.png" alt="签筒">
+      <img id="lot-img" src="img/container.webp" alt="签筒">
     </div>
 
     <!-- 里程碑进度条 -->
@@ -247,10 +262,10 @@
           <p class="hint">主页会随机掉落生产力相关内容和工具，如果有问题或建议，可以去这些地方找我</p>
           <div class="about-links">
             <a class="about-link" href="https://b23.tv/yWJkTSC" target="_blank" rel="noopener noreferrer" title="哔哩哔哩">
-              <img src="img/logo/bilibili.png" alt="哔哩哔哩">
+              <img src="img/logo/bilibili.webp" alt="哔哩哔哩">
             </a>
             <a class="about-link" href=" https://xhslink.com/m/6I6pbFn5aWa" target="_blank" rel="noopener noreferrer" title="小红书">
-              <img src="img/logo/red.png" alt="小红书">
+              <img src="img/logo/red.webp" alt="小红书">
             </a>
           </div>
         </div>
