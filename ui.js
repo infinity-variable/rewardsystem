@@ -109,6 +109,7 @@ export function renderProgressBar() {
     } else if (isAchieved) {
       btn.classList.add('achieved');
       btn.title = '点击领取奖励！';
+      btn.dataset.sound = 'bonus';
       // 达成后右上角红点引导
       const dot = document.createElement('span');
       dot.className = 'chest-red-dot';
@@ -272,7 +273,7 @@ export {
   showHexagramDetail, closeHexagramDetail
 } from './ui-collection.js';
 export {
-  openTasksModal, closeTasksModal,
+  openTasksModal, openDailySignin, closeTasksModal,
   renderDailyTasks, renderOnboardingLine,
   refreshActiveTaskTab,
   updateTaskButtonVisibility, updateTaskRedDot, updateLineTabsRedDot,

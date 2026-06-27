@@ -8,6 +8,26 @@ import { checkAchievements } from './achievements.js';
 import { $ } from './dom.js';
 import { recordTaskEvent } from './tasks-tracker.js';
 import { track } from './analytics.js';
+import { playSound } from './sound.js';
+
+// 签筒摇晃动画：播放 animation 后返回 Promise，摇晃期间禁止重复抽签
+let _isShaking = false;
+function _shakeLot() {
+  return new Promise(resolve => {
+    const container = $('lot-container');
+    container.classList.remove('lot-shaking');
+    void container.offsetWidth; // 强制 reflow 以重置动画
+    container.classList.add('lot-shaking');
+    playSound('shake');
+    const onEnd = () => {
+      container.classList.remove('lot-shaking');
+      container.removeEventListener('animationend', onEnd);
+      _isShaking = false;
+      resolve();
+    };
+    container.addEventListener('animationend', onEnd);
+  });
+}
 
 // 单次抽签核心逻辑：生成随机卦象、判定铜币类型、更新状态与统计、收集卦象。
 // 返回 { coin, hexagramName, num, earned }，earned=false 表示铜币已达上限未发放。
@@ -33,7 +53,8 @@ function _drawSingle(state) {
   return { coin, hexagramName, num, earned };
 }
 
-export function drawLot() {
+export async function drawLot() {
+  if (_isShaking) return;
   const state = getState();
   const doubleActive = !!(state.talismanEffects && state.talismanEffects.doubleDraw);
   const result = _drawSingle(state);
@@ -58,6 +79,8 @@ export function drawLot() {
   addCoinLog('earn', 1 + bonus, `抽签 ${coin.name}${bonus ? '（翻倍）' : ''}`);
   checkAchievements();
   commit();
+  _isShaking = true;
+  await _shakeLot();
   showDrawModal(coin, hexagramName, num, bonus > 0);
   // 任务埋点：抽一次签（含每日"完成1次抽奖"）
   recordTaskEvent('draw_once');
@@ -65,7 +88,8 @@ export function drawLot() {
   try { track('lottery_draw', { drawType: 'single', bonus: bonus > 0, coin: coin.id }); } catch (e) {}
 }
 
-export function drawLotTen() {
+export async function drawLotTen() {
+  if (_isShaking) return;
   const state = getState();
   recordDrawDay();
   const results = [];
@@ -78,6 +102,8 @@ export function drawLotTen() {
   if (earnedCount > 0) addCoinLog('earn', earnedCount, '抽签十次');
   checkAchievements();
   commit();
+  _isShaking = true;
+  await _shakeLot();
   showDrawTenModal(results);
   // 任务埋点：抽十次签（也算完成每日1次抽奖）
   recordTaskEvent('draw_ten');
@@ -117,6 +143,7 @@ function showDrawModal(trigram, hexagramName, num, doubled = false) {
   loadHexagramTexts().then(() => {
     daxiangDiv.textContent = getDaxiangText(hexagramName);
   });
+  playSound('coin');
   $('draw-modal').classList.add('active');
 }
 
@@ -164,6 +191,7 @@ function showDrawTenModal(results) {
   });
 
   nameDiv.appendChild(grid);
+  playSound('coin');
   modal.classList.add('active');
 }
 

@@ -189,8 +189,21 @@ body {
 #lot-container:hover { transform: scale(1.05); }
 #lot-container:active { transform: scale(0.95); }
 
+/* 签筒摇晃动画（抽签时触发） */
+@keyframes lot-shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-8deg); }
+  40% { transform: rotate(8deg); }
+  60% { transform: rotate(-5deg); }
+  80% { transform: rotate(5deg); }
+}
+#lot-container.lot-shaking {
+  animation: lot-shake 0.4s ease-in-out;
+  pointer-events: none; /* 摇晃期间禁止重复点击 */
+}
+
 #lot-img {
-  width: 240px;
+  width: 312px;                 /* 1.3× 原尺寸 240px */
   height: auto;
   border-radius: 8px;
 }
@@ -202,9 +215,11 @@ body {
 }
 
 /* ===== 操作按钮 ===== */
+/* width:100% + space-between：使设置按钮左缘对齐铜币左缘，任务按钮右缘对齐贝筹右缘 */
 #action-buttons {
   display: flex;
-  gap: 39px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 #action-buttons button {
@@ -1019,6 +1034,56 @@ body {
   cursor: pointer;
 }
 
+/* ===== 音效开关 ===== */
+.sound-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  margin-top: 10px;
+  user-select: none;
+}
+
+.sound-toggle-label input[type="checkbox"] {
+  display: none;
+}
+
+.sound-toggle-switch {
+  width: 44px;
+  height: 24px;
+  background: #ccc;
+  border-radius: 12px;
+  position: relative;
+  transition: background 0.2s;
+  flex-shrink: 0;
+}
+
+.sound-toggle-switch::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  background: var(--text-white);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: left 0.2s;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.sound-toggle-label input:checked + .sound-toggle-switch {
+  background: var(--title-red);
+}
+
+.sound-toggle-label input:checked + .sound-toggle-switch::after {
+  left: 22px;
+}
+
+.sound-toggle-text {
+  color: var(--text-dark);
+  font-size: 0.9rem;
+}
+
 /* ===== 贝筹流水 ===== */
 .log-header {
   display: flex;
@@ -1325,10 +1390,71 @@ body {
 }
 .backup-reminder-close:hover { color: #5a3f00; }
 
-/* ===== 响应式 ===== */
+/* ===== 响应式：移动端适配 ===== */
+/* 策略：
+   - space-between 均分剩余空间到三个间距 → 三个间距都随屏高增大
+   - vh margin 拉开层级差异：铜币↔签筒(最大) > 签筒↔进度条(中等) > 进度条↔按键(最短)
+   - iPhone SE 内容平铺填满，高屏三个间距等比增大 */
 @media (max-width: 480px) {
-  #main-screen { padding: 16px; gap: 16px; }
-  #lot-img { width: 80px; }
+  body {
+    align-items: stretch;          /* 主界面铺满视口高度 */
+  }
+
+  #main-screen {
+    width: 100%;
+    max-width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    /* 底部吸收超 iPhone SE(568px) 高度的 45%，控制高屏间距不过大 */
+    padding: 16px 16px calc(32px + env(safe-area-inset-bottom, 0px) + max(0px, 100vh - 568px) * 0.45);
+    gap: 0;
+    justify-content: space-between;  /* 剩余空间均分到三个间距，随屏高增大 */
+  }
+
+  #info-buttons {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  /* 签筒：自然高度，margin-top 叠加在 space-between 基础上拉大铜币↔签筒间距 */
+  #lot-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3vh;               /* +space-between 基础值 = 最大间距 */
+  }
+
+  #lot-img {
+    width: 286px;                 /* 1.3× 原尺寸 220px */
+  }
+
+  /* 进度条：margin-top 叠加在 space-between 基础上，中等间距 */
+  #milestone-progress {
+    flex-shrink: 0;
+    margin-top: 1.5vh;             /* +space-between 基础值 = 中等间距 */
+  }
+
+  /* 底部按键：无额外 margin，间距 = space-between 基础值（最短） */
+  #action-buttons {
+    width: 100%;
+    flex-shrink: 0;
+    justify-content: space-between;
+    gap: 0;
+    padding: 0 8px;
+  }
+
+  #action-buttons button {
+    /* 按钮大小随屏宽自适应：窄屏自动缩小，宽屏接近桌面 75×90，无强制间距 */
+    width: clamp(50px, 14vw, 75px);
+    height: clamp(60px, 17vw, 90px);
+    font-size: 0.85rem;
+    padding: 6px 2px;
+    writing-mode: vertical-rl;     /* 文字竖排：第一行"设"第二行"置" */
+    text-orientation: upright;     /* CJK 字符正立 */
+  }
+
+  /* 其他小屏适配 */
   #coin-select { grid-template-columns: repeat(4, 1fr); gap: 8px; }
   .coin-select-item .coin-icon { width: 36px; height: 36px; font-size: 1.1rem; border-radius: 50%; }
   .wheel-wrapper canvas { width: 260px; height: 260px; }
@@ -1336,6 +1462,7 @@ body {
 }
 
 @media (max-width: 360px) {
+  #lot-img { width: 260px; }       /* 1.3× 原尺寸 200px */
   #coin-select { grid-template-columns: repeat(3, 1fr); }
 }
 

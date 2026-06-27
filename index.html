@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>奖励转盘系统</title>
   <meta name="description" content="基于周易八卦的奖励转盘系统，通过抽签、投币、转盘玩法定制个人任务奖励，哄自己做该做的事。">
   <link rel="stylesheet" href="style.css">
@@ -51,11 +51,11 @@
     </div>
 
     <div id="action-buttons">
-      <button id="settings-btn"> 设置 </button>
-      <button id="shop-btn" title="点击打开贝筹商城"> 商城 </button>
-      <button id="lottery-btn"> 转盘 </button>
-      <button id="achievement-btn"> 成就 <span class="red-dot"></span></button>
-      <button id="task-btn"> 任务 <span class="red-dot"></span></button>
+      <button id="settings-btn">设置</button>
+      <button id="shop-btn" title="点击打开贝筹商城">商城</button>
+      <button id="lottery-btn">转盘</button>
+      <button id="achievement-btn">成就<span class="red-dot"></span></button>
+      <button id="task-btn">任务<span class="red-dot"></span></button>
     </div>
   </div>
 
@@ -139,8 +139,8 @@
       </div>
       <div id="reward-result" class="result-display"></div>
       <div id="spin-buttons">
-        <button id="spin-btn" class="btn-window" disabled>转一次</button>
-        <button id="spin-ten-btn" class="btn-window" disabled>转十次</button>
+        <button id="spin-btn" class="btn-window" data-sound="spin" disabled>转一次</button>
+        <button id="spin-ten-btn" class="btn-window" data-sound="spin" disabled>转十次</button>
       </div>
       <button id="reward-close" class="btn-close btn-window hidden">收下</button>
     </div>
@@ -190,7 +190,7 @@
         <div id="shop-grid" class="achievement-grid"></div>
         <p id="shop-empty" class="hint hidden">暂无商品，请在设置中添加</p>
         <div class="center-row-top">
-          <button class="btn-success btn-window hidden" id="shop-buy-btn">购买</button>
+          <button class="btn-success btn-window hidden" id="shop-buy-btn" data-sound="bonus">购买</button>
         </div>
       </div>
       <div class="help-panel shop-sub-panel" data-shop-panel="history">
@@ -246,6 +246,16 @@
             <button id="settings-reset" class="btn-danger btn-window">清零</button>
             <input type="file" id="import-data-file" accept=".json" class="hidden">
           </div>
+        </div>
+
+        <div class="milestone-section">
+          <h3>音效</h3>
+          <p class="hint">开启后，抽签、转盘、领取奖励等操作会播放音效</p>
+          <label class="sound-toggle-label">
+            <input type="checkbox" id="sound-enabled-checkbox">
+            <span class="sound-toggle-switch"></span>
+            <span class="sound-toggle-text">音效</span>
+          </label>
         </div>
 
         <div class="milestone-section">

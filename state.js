@@ -63,8 +63,6 @@ export function getEmptyState() {
   const def = getDefaultState();
   return {
     ...def,
-    settings: { taskName: '四平马步', taskBaseCount: 30 },
-    tasks: [{ name: '四平马步', count: 30, unit: '秒' }],
     milestones: [],
     shopItems: [],
   };
@@ -77,12 +75,12 @@ export function migrateState(parsed) {
   if (!parsed.jar) parsed.jar = def.jar;
   if (typeof parsed.points !== 'number') parsed.points = 0;
   if (typeof parsed.totalInvested !== 'number') parsed.totalInvested = 0;
-  if (!parsed.settings) parsed.settings = { taskName: '四平马步', taskBaseCount: 30 };
-  if (!parsed.settings.taskName) parsed.settings.taskName = '四平马步';
-  if (typeof parsed.settings.taskBaseCount !== 'number') parsed.settings.taskBaseCount = 30;
+  if (!parsed.settings) parsed.settings = { ...def.settings };
+  if (!parsed.settings.taskName) parsed.settings.taskName = def.settings.taskName;
+  if (typeof parsed.settings.taskBaseCount !== 'number') parsed.settings.taskBaseCount = def.settings.taskBaseCount;
   if (!Array.isArray(parsed.tasks)) {
     // 从旧版 settings 迁移
-    parsed.tasks = [{ name: parsed.settings.taskName || '四平马步', count: parsed.settings.taskBaseCount || 30, unit: '秒' }];
+    parsed.tasks = [{ name: parsed.settings.taskName || def.settings.taskName, count: parsed.settings.taskBaseCount || def.settings.taskBaseCount, unit: DEFAULT_TASKS[0].unit }];
   }
   parsed.tasks.forEach(t => { if (!t.unit) t.unit = '个'; });
   if (!Array.isArray(parsed.milestones)) parsed.milestones = [];

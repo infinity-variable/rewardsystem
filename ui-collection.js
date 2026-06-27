@@ -44,6 +44,7 @@ function renderCollectionProgress() {
       btn.classList.add('achieved');
       const tal = getTalisman(chest.reward.id);
       btn.title = `点击领取：${tal ? tal.name : ''}`;
+      btn.dataset.sound = 'bonus';
       // 达成后右上角红点引导
       const dot = document.createElement('span');
       dot.className = 'chest-red-dot';
@@ -112,6 +113,8 @@ export async function renderCollection() {
     const item = document.createElement('div');
     // 类名与 style.css 一致：drawn 表示已收集（红框高亮）
     item.className = 'collection-item' + (collected ? ' drawn' : '');
+    // 新卦象可领取币胚，标记为 bonus 音效
+    if (isNew) item.dataset.sound = 'bonus';
     item.innerHTML = `
       <div class="collection-icon"><div class="collection-icon-inner" style="background:${trigramColor}">${collected ? guafu : num}</div></div>
       <div class="collection-name">${collected ? name : '???'}</div>

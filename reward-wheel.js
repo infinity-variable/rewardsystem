@@ -11,6 +11,7 @@ import { setTenSpinBonusCount } from './bonus-wheel.js';
 import { $ } from './dom.js';
 import { recordTaskEvent } from './tasks-tracker.js';
 import { track } from './analytics.js';
+import { playSound } from './sound.js';
 
 // 奖励卡片工厂：创建统一的 coin-select-item 奖励展示元素。
 // label: 卡片标签文本；points: 数值（showPoints=false 时不显示）；
@@ -179,6 +180,7 @@ function handleBonusSector(state, sector, investedCount, drops) {
   dropItems.forEach(it => grid.appendChild(it));
 
   commit();
+  playSound('coin');
   $('one-spin-modal').classList.add('active');
 }
 
@@ -236,6 +238,7 @@ function showNormalRewardResult({ itemLabel, actualPoints, itemColor, subColor, 
   getState().jar = { type: null, count: 0, usedTaiji: 0 };
   commit();
 
+  playSound('coin');
   $('one-spin-modal').classList.add('active');
 }
 
@@ -395,5 +398,6 @@ function showTenSpinResult(results, totalPoints, bonusCount, deductCount, talism
     closeBtn.style.display = 'block';
   }
 
+  playSound('coin');
   modal.classList.add('active');
 }

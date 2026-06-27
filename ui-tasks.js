@@ -27,6 +27,13 @@ export function openTasksModal() {
   _switchMainTab(showTab);
 }
 
+// 打开每日签到（每天首次打开页面时调用）
+export function openDailySignin() {
+  $('tasks-modal').classList.add('active');
+  refreshMainTabsVisibility();
+  _switchMainTab('daily');
+}
+
 export function closeTasksModal() {
   $('tasks-modal').classList.remove('active');
 }
@@ -108,7 +115,7 @@ export function renderDailyTasks() {
       </div>
       <div class="ts-row-bottom">
         <span class="ts-reward-label">奖励：${escapeHtml(_rewardLabel(def.reward))}</span>
-        <button class="btn-success btn-window ts-claim" data-id="${def.id}" ${(!done || claimed) ? 'disabled' : ''}>${claimed ? '已领取' : '领奖'}</button>
+        <button class="btn-success btn-window ts-claim" data-id="${def.id}" data-sound="bonus" ${(!done || claimed) ? 'disabled' : ''}>${claimed ? '已领取' : '领奖'}</button>
       </div>
     `;
     container.appendChild(row);
@@ -168,7 +175,7 @@ export function renderOnboardingLine(lineId) {
       </div>
       <div class="ts-row-bottom">
         <span class="ts-reward-label">奖励：${escapeHtml(_rewardLabel(def.reward))}</span>
-        <button class="btn-success btn-window ts-claim-ob" data-id="${def.id}" ${(!done || claimed) ? 'disabled' : ''}>${claimed ? '已领取' : '领奖'}</button>
+        <button class="btn-success btn-window ts-claim-ob" data-id="${def.id}" data-sound="bonus" ${(!done || claimed) ? 'disabled' : ''}>${claimed ? '已领取' : '领奖'}</button>
       </div>
     `;
     panel.appendChild(row);
@@ -197,7 +204,7 @@ export function renderOnboardingLine(lineId) {
 // 奖励文案
 function _rewardLabel(reward) {
   if (reward.type === 'random') {
-    return reward.options.map(o => _rewardLabel(o)).join(' 或 ');
+    return reward.options.map(o => _rewardLabel(o)).join(' / ');
   }
   if (reward.type === 'fragment') return `币胚×${reward.amount}`;
   if (reward.type === 'talisman') {

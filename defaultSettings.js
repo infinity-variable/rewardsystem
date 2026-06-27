@@ -15,5 +15,5 @@ export const DEFAULT_SHOP_ITEMS = [
 ];
 
 export const DEFAULT_TASKS = [
-  { name: '四平马步', count: 60, unit: 's' }
+  { name: '四平马步', count: 30, unit: 's' }
 ];

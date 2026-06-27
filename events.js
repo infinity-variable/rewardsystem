@@ -18,6 +18,15 @@ import {
 } from './wheels.js';
 import { $ } from './dom.js';
 import { recordTaskEvent, recordPageOpen } from './tasks-tracker.js';
+import { playSound, isSoundEnabled, setSoundEnabled } from './sound.js';
+
+// 本地日期字符串（与 state.js 的 _todayStr 保持一致）
+function _todayStr() {
+  const now = new Date();
+  return now.getFullYear() + '-' +
+    String(now.getMonth() + 1).padStart(2, '0') + '-' +
+    String(now.getDate()).padStart(2, '0');
+}
 
 // ===== 工具函数：批量绑定 =====
 // 通用点击绑定
@@ -62,6 +71,31 @@ document.addEventListener('DOMContentLoaded', () => {
   lotContainer.addEventListener('contextmenu', (e) => {
     e.preventDefault();
     showLotContextMenu(e.clientX, e.clientY);
+  });
+  // 移动端长按模拟右键菜单
+  let longPressTimer = null;
+  let longPressTriggered = false;
+  let longPressStartX = 0;
+  let longPressStartY = 0;
+  lotContainer.addEventListener('touchstart', (e) => {
+    longPressTriggered = false;
+    const touch = e.touches[0];
+    longPressStartX = touch.clientX;
+    longPressStartY = touch.clientY;
+    longPressTimer = setTimeout(() => {
+      longPressTriggered = true;
+      showLotContextMenu(touch.clientX, touch.clientY);
+    }, 500);
+  }, { passive: true });
+  lotContainer.addEventListener('touchmove', (e) => {
+    const touch = e.touches[0];
+    const dx = touch.clientX - longPressStartX;
+    const dy = touch.clientY - longPressStartY;
+    if (dx * dx + dy * dy > 25) clearTimeout(longPressTimer); // 移动超过5px取消
+  }, { passive: true });
+  lotContainer.addEventListener('touchend', (e) => {
+    clearTimeout(longPressTimer);
+    if (longPressTriggered) e.preventDefault(); // 长按已触发，阻止后续click
   });
   document.addEventListener('click', () => {
     const menu = $('lot-context-menu');
@@ -333,6 +367,13 @@ document.addEventListener('DOMContentLoaded', () => {
   // 首次访问显示健康游戏忠告
   if (!localStorage.getItem(CONFIG.HEALTH_NOTICE_KEY)) {
     $('health-notice-modal').classList.add('active');
+  } else if (localStorage.getItem(CONFIG.ONBOARDING_KEY)) {
+    // 已完成防沉迷和新手引导：每天首次打开自动弹出每日签到
+    const today = _todayStr();
+    if (localStorage.getItem(CONFIG.LAST_DAILY_SIGNIN_KEY) !== today) {
+      localStorage.setItem(CONFIG.LAST_DAILY_SIGNIN_KEY, today);
+      UI.openDailySignin();
+    }
   }
   bindClick('health-notice-confirm', () => {
     localStorage.setItem(CONFIG.HEALTH_NOTICE_KEY, '1');
@@ -412,4 +453,27 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     $('help-modal').classList.add('active');
   });
+
+  // ===== 音效系统 =====
+  // 全局点击音效分发：data-sound 属性指定特定音效，其余 button 点击播放 click.mp3
+  document.addEventListener('click', (e) => {
+    const soundEl = e.target.closest('[data-sound]');
+    if (soundEl) {
+      playSound(soundEl.dataset.sound);
+      return;
+    }
+    const btn = e.target.closest('button');
+    if (btn && !btn.disabled) {
+      playSound('click');
+    }
+  });
+
+  // 音效开关复选框：初始化状态并绑定切换事件
+  const soundCheckbox = $('sound-enabled-checkbox');
+  if (soundCheckbox) {
+    soundCheckbox.checked = isSoundEnabled();
+    soundCheckbox.addEventListener('change', () => {
+      setSoundEnabled(soundCheckbox.checked);
+    });
+  }
 });

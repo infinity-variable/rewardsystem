@@ -33,7 +33,7 @@ export function renderAchievements() {
     const rewardClaimed = !!(reward && reward.claimed);
     const rewardLabel = reward ? _achRewardLabel(reward.reward) : '';
     const claimBtn = (achieved && reward && !rewardClaimed)
-      ? `<button class="btn-success btn-window ach-claim-btn" data-ach-id="${def.id}">领奖</button>`
+      ? `<button class="btn-success btn-window ach-claim-btn" data-ach-id="${def.id}" data-sound="bonus">领奖</button>`
       : (achieved && rewardClaimed ? `<span class="ach-claimed-tag">已领取</span>` : '');
     const redDot = (achieved && reward && !rewardClaimed) ? '<span class="ach-red-dot"></span>' : '';
     allItems.push({
@@ -69,7 +69,7 @@ export function renderAchievements() {
       const rewardClaimed = !!(reward && reward.claimed);
       const rewardLabel = reward ? _achRewardLabel(reward.reward) : '';
       const claimBtn = (achieved && reward && !rewardClaimed)
-        ? `<button class="btn-success btn-window ach-claim-btn" data-ach-id="${achId}">领奖</button>`
+        ? `<button class="btn-success btn-window ach-claim-btn" data-ach-id="${achId}" data-sound="bonus">领奖</button>`
         : (achieved && rewardClaimed ? `<span class="ach-claimed-tag">已领取</span>` : '');
       const redDot = (achieved && reward && !rewardClaimed) ? '<span class="ach-red-dot"></span>' : '';
 

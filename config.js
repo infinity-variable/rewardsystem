@@ -106,7 +106,9 @@ export const CONFIG = {
   // 本地存储键
   STORAGE_KEY: 'rewardWheelState',
   HEALTH_NOTICE_KEY: 'healthNoticeShown',
-  ONBOARDING_KEY: 'onboardingShown'
+  ONBOARDING_KEY: 'onboardingShown',
+  SOUND_ENABLED_KEY: 'soundEnabled',
+  LAST_DAILY_SIGNIN_KEY: 'lastDailySigninDate'
 };
 
 // ===== 八卦铜币定义 =====
