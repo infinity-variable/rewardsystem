@@ -6,6 +6,7 @@ import { getState, commit, addPointLog, addCoinLog } from './state.js';
 import { drawWheel, spinWheel, pickSector } from './wheels.js';
 import { createRewardItem } from './reward-wheel.js';
 import { $ } from './dom.js';
+import { playSound } from './sound.js';
 
 // 单次机缘状态
 let bonusState = {
@@ -57,6 +58,7 @@ function spinNextTenSpinBonus() {
 
   setTimeout(async () => {
     const sectorIndex = pickSector(BONUS_SECTORS);
+    playSound('spin');
     await spinWheel(canvas, BONUS_SECTORS, sectorIndex);
     handleTenSpinBonusResult(sectorIndex);
   }, CONFIG.WHEEL_AUTO_SPIN_DELAY);
@@ -133,6 +135,7 @@ function openBonusChallengeModal(nonFreePcts, sectors) {
   });
 
   modal.classList.add('active');
+  playSound('bonus');
 }
 
 function finishTenSpinBonus(gaveUp) {
@@ -181,6 +184,7 @@ function finishTenSpinBonus(gaveUp) {
   tenSpinBonusSectors = [];
 
   rewardArea.style.display = 'block';
+  playSound('coin');
 }
 
 // ===== 单次机缘转盘流程 =====
@@ -210,6 +214,7 @@ export function openBonusWheel() {
 
   setTimeout(async () => {
     const sectorIndex = pickSector(BONUS_SECTORS);
+    playSound('spin');
     await spinWheel(canvas, BONUS_SECTORS, sectorIndex);
     handleBonusResult(sectorIndex);
   }, CONFIG.WHEEL_AUTO_SPIN_DELAY);
@@ -268,6 +273,7 @@ function handleBonusResult(sectorIndex) {
   challengeItems.appendChild(item);
 
   modal.classList.add('active');
+  playSound('bonus');
 }
 
 export function completeChallenge() {
@@ -335,6 +341,7 @@ function finishBonus() {
   };
 
   rewardArea.style.display = 'block';
+  playSound('coin');
 }
 
 export function closeBonusWheel() {

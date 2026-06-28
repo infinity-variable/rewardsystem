@@ -1456,9 +1456,20 @@ body {
 
   /* 其他小屏适配 */
   #coin-select { grid-template-columns: repeat(4, 1fr); gap: 8px; }
-  .coin-select-item .coin-icon { width: 36px; height: 36px; font-size: 1.1rem; border-radius: 50%; }
+  #coin-select .coin-select-item .coin-icon { width: 36px; height: 36px; font-size: 1.1rem; border-radius: 50%; }
   .wheel-wrapper canvas { width: 260px; height: 260px; }
   #spin-btn { padding: 12px 36px; font-size: 1rem; }
+
+  /* 抽签十连/转盘结果网格：缩小硬币框与字号，保留 item 方形背景 */
+  .draw-modal-content { padding-left: 16px; padding-right: 16px; }
+  .draw-ten-grid { gap: 6px; margin-top: 8px; }
+  .draw-ten-grid .coin-select-item { padding: 4px 2px 2px 2px; }
+  .draw-ten-grid .coin-select-item .coin-icon { width: 48px; height: 48px; padding: 2px; }
+  .draw-ten-grid .coin-select-item .coin-char { width: 34px; height: 34px; font-size: 0.95rem; }
+  .draw-ten-grid .coin-select-item .talisman-inner,
+  .draw-ten-grid .coin-select-item .fragment-inner { width: 34px; height: 34px; font-size: 0.95rem; }
+  .draw-ten-grid .coin-select-item .coin-name { font-size: 0.7rem; }
+  .draw-ten-grid .spin-item-sub { font-size: 0.65rem; margin-top: 1px; }
 }
 
 @media (max-width: 360px) {
@@ -1607,6 +1618,7 @@ body {
 
 /* 新手任务线 tab 上的小红点 */
 .ts-main-tab { position: relative; }
+.ts-nowr { display: inline-block; white-space: nowrap; }
 .ts-main-tab .red-dot {
   position: absolute;
   top: -2px;
@@ -2408,6 +2420,8 @@ body {
   margin-bottom: 6px;
 }
 .ts-row-title {
+  flex: 1;
+  min-width: 0;
   font-weight: bold;
   font-size: 1rem;
   color: var(--text-dark);
@@ -2426,12 +2440,16 @@ body {
   gap: 8px;
 }
 .ts-reward-label {
+  flex: 1;
+  min-width: 0;
   font-size: 0.9rem;
   color: var(--text-dark);
 }
 
 /* 任务行内小按钮（继承 .btn-success.btn-window 但更小） */
 .ts-row .btn-success.btn-window {
+  flex-shrink: 0;
+  white-space: nowrap;
   padding: 4px 14px;
   font-size: 0.85rem;
   font-weight: bold;
