@@ -39,7 +39,9 @@ const EVENT_MAP = {
   export_data:  { onboarding: 'ob_export' },
   // 归藏
   view_coin_count: { onboarding: 'ob_view_coin_count' },  // 查看荷包内硬币数量
-  view_points_log: { onboarding: 'ob_view_points_log' }   // 查看贝筹流水
+  view_points_log: { onboarding: 'ob_view_points_log' },  // 查看贝筹流水
+  // 童蒙
+  view_help:     { onboarding: 'ob_view_help' }            // 查看使用说明
 };
 
 // 记录一次任务事件

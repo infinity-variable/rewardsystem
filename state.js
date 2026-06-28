@@ -587,7 +587,7 @@ export function isOnboardingLineComplete(lineId) {
   });
 }
 
-// 三条线是否全部完成（用于隐藏任务按钮）
+// 所有新手任务线是否全部完成（用于隐藏新手任务 Tab）
 export function isAllOnboardingComplete() {
   return ONBOARDING_LINES.every(l => isOnboardingLineComplete(l.id));
 }
@@ -677,11 +677,32 @@ function _applyReward(reward) {
     // 随机获得 1 枚八卦硬币
     const bagua = getBaguaTypes();
     const tg = bagua[Math.floor(Math.random() * bagua.length)];
-    _state.unexchangedCoins[tg.id] = Math.min(CONFIG.COIN_MAX_COUNT, _state.unexchangedCoins[tg.id] + 1);
-    _state.stats.totalCoinsEarned++;
-    _state.stats.trigramDrawCount[tg.id] = (_state.stats.trigramDrawCount[tg.id] || 0) + 1;
-    addCoinLog('earn', 1, `新手任务奖励 ${tg.name}`);
+    _addCoinById(tg.id, 1, `新手任务奖励 ${tg.name}`);
     return `八卦硬币「${tg.name}」×1`;
   }
+  if (reward.type === 'taiji') {
+    _addCoinById('taiji', reward.amount, '新手任务奖励 太极');
+    return `太极币×${reward.amount}`;
+  }
+  if (reward.type === 'trigram') {
+    const t = TRIGRAMS.find(x => x.id === reward.id);
+    _addCoinById(reward.id, reward.amount, `新手任务奖励 ${t ? t.name : reward.id}`);
+    return `${t ? t.name : reward.id}币×${reward.amount}`;
+  }
+  if (reward.type === 'all_coins') {
+    TRIGRAMS.forEach(t => _addCoinById(t.id, 1, `新手任务奖励 ${t.name}`));
+    return '九种铜币各一枚';
+  }
   return '未知奖励';
+}
+
+// 内部：增加指定铜币并更新统计/流水（自动尊重 COIN_MAX_COUNT 上限）
+function _addCoinById(coinId, amount, desc) {
+  const cur = _state.unexchangedCoins[coinId] || 0;
+  const add = Math.min(amount, CONFIG.COIN_MAX_COUNT - cur);
+  if (add <= 0) return;
+  _state.unexchangedCoins[coinId] = cur + add;
+  _state.stats.totalCoinsEarned += add;
+  _state.stats.trigramDrawCount[coinId] = (_state.stats.trigramDrawCount[coinId] || 0) + add;
+  addCoinLog('earn', add, desc);
 }

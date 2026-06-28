@@ -378,56 +378,11 @@ document.addEventListener('DOMContentLoaded', () => {
   bindClick('health-notice-confirm', () => {
     localStorage.setItem(CONFIG.HEALTH_NOTICE_KEY, '1');
     $('health-notice-modal').classList.remove('active');
-    // 防沉迷关闭后，首次访问自动触发新手引导
+    // 防沉迷关闭后，首次访问自动弹出新手任务（仅一次）
     if (!localStorage.getItem(CONFIG.ONBOARDING_KEY)) {
-      openOnboarding();
+      localStorage.setItem(CONFIG.ONBOARDING_KEY, '1');
+      UI.openTasksModal();
     }
-  });
-
-  // ===== 新手引导 wizard =====
-  const ONBOARDING_TOTAL = 6;
-  let onboardingStep = 0;
-
-  function updateOnboardingUI() {
-    document.querySelectorAll('#onboarding-modal .onboarding-step').forEach(el => {
-      el.classList.toggle('active', parseInt(el.dataset.step) === onboardingStep);
-    });
-    $('onboarding-step-indicator').textContent = `${onboardingStep + 1} / ${ONBOARDING_TOTAL}`;
-    $('onboarding-prev').disabled = onboardingStep === 0;
-    $('onboarding-next').textContent = onboardingStep === ONBOARDING_TOTAL - 1 ? '开始体验' : '下一步';
-  }
-
-  function openOnboarding() {
-    onboardingStep = 0;
-    updateOnboardingUI();
-    $('onboarding-modal').classList.add('active');
-  }
-
-  function closeOnboarding(markShown = true) {
-    $('onboarding-modal').classList.remove('active');
-    if (markShown) localStorage.setItem(CONFIG.ONBOARDING_KEY, '1');
-  }
-
-  bindClick('onboarding-skip', () => closeOnboarding(true));
-  bindClick('onboarding-prev', () => {
-    if (onboardingStep > 0) {
-      onboardingStep--;
-      updateOnboardingUI();
-    }
-  });
-  bindClick('onboarding-next', () => {
-    if (onboardingStep < ONBOARDING_TOTAL - 1) {
-      onboardingStep++;
-      updateOnboardingUI();
-    } else {
-      closeOnboarding(true);
-    }
-  });
-
-  // 设置中「重看引导」入口
-  bindClick('replay-onboarding-btn', () => {
-    UI.closeSettings();
-    openOnboarding();
   });
 
   // ===== 使用说明 Tab 切换 =====
@@ -443,15 +398,34 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // 打开使用说明：默认回到「建议设置」Tab
+  // 打开使用说明：默认回到「快速上手」Tab
   bindClick('settings-help', () => {
     document.querySelectorAll('#help-modal .help-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.tab === 'suggest');
+      t.classList.toggle('active', t.dataset.tab === 'quick');
     });
     document.querySelectorAll('#help-modal .help-panel').forEach(p => {
-      p.classList.toggle('active', p.dataset.panel === 'suggest');
+      p.classList.toggle('active', p.dataset.panel === 'quick');
     });
     $('help-modal').classList.add('active');
+    // 触发童蒙线「查看帮助」任务进度
+    recordTaskEvent('view_help');
+  });
+
+  // ===== 秘籍弹窗 =====
+  // 所有带 data-cheats 属性的按键都打开秘籍弹窗
+  document.querySelectorAll('[data-cheats]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      $('cheats-modal').classList.add('active');
+    });
+  });
+  bindClick('settings-cheats', () => {
+    $('cheats-modal').classList.add('active');
+  });
+  bindClick('cheats-cancel', () => {
+    $('cheats-modal').classList.remove('active');
+  });
+  bindClick('cheats-close', () => {
+    $('cheats-modal').classList.remove('active');
   });
 
   // ===== 音效系统 =====

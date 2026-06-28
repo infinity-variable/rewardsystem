@@ -1,5 +1,5 @@
-// ===== 任务弹窗：每日签到 + 新手任务（起卦/观象/定数 三条线） =====
-import { DAILY_TASKS, ONBOARDING_LINES, TALISMANS } from './config.js';
+// ===== 任务弹窗：每日签到 + 新手任务（起卦/定数/归藏/观象/市易/鸿渐/实录/童蒙 八条线） =====
+import { DAILY_TASKS, ONBOARDING_LINES, TALISMANS, TRIGRAMS } from './config.js';
 import {
   getState, commit,
   claimDailyTask, claimOnboardingTask,
@@ -213,6 +213,12 @@ function _rewardLabel(reward) {
   }
   if (reward.type === 'point') return `积分×${reward.amount}`;
   if (reward.type === 'coin') return `八卦硬币×${reward.amount}`;
+  if (reward.type === 'taiji') return `太极币×${reward.amount}`;
+  if (reward.type === 'trigram') {
+    const t = TRIGRAMS.find(x => x.id === reward.id);
+    return `${t ? t.name : reward.id}币×${reward.amount}`;
+  }
+  if (reward.type === 'all_coins') return '九种铜币各一枚';
   return '未知奖励';
 }
 
@@ -268,6 +274,14 @@ function _gotoOnboarding(gotoKey) {
       break;
     case 'settings_shop':
       openSettings('shop');
+      break;
+    case 'settings_help':
+      openSettings();
+      // 滚动到帮助模块，使其出现在用户视野中
+      setTimeout(() => {
+        const el = document.getElementById('settings-help-section');
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
       break;
     case 'shop':
       openShop();

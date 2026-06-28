@@ -606,6 +606,16 @@ body {
 }
 .btn-x:hover { background: var(--bg-light-transparent-hover); color: var(--text-white); border-color: var(--border-light-hover); }
 
+/* 秘籍按键（设置弹窗标题内：推到标题行右侧；样式大小类似任务行「前往」） */
+.milestone-section h3 .btn-cheats.btn-success.btn-window {
+  margin-left: auto;
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 4px 14px;
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
 
 .settings-field {
   display: flex;

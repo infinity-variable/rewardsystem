@@ -239,41 +239,54 @@ export const DAILY_TASKS = [
   }
 ];
 
-// 新手任务六条线：起卦 / 观象 / 定数 / 市易 / 实录 / 归藏
+// 新手任务八条线：起卦 / 定数 / 归藏 / 观象 / 市易 / 鸿渐 / 实录 / 童蒙
 // 每条线按顺序逐个解锁（前一个完成且领奖后才解锁下一个）
-// goal: 埋点事件 id，由 recordOnboardingProgress 触发
 // goto: 前往按钮跳转动作 key（由 ui-tasks.js 路由）
 // unlockAfter: 该线解锁需要的前置线 id（无则默认解锁）：
+//   初始默认解锁：起卦、定数
 //   - 归藏线：起卦线完成后激活
+//   - 观象线：归藏线完成后激活
 //   - 市易线：定数线完成后激活
+//   - 鸿渐线：定数线完成后激活
 //   - 实录线：市易线完成后激活
+//   - 童蒙线：鸿渐线完成后激活
 export const ONBOARDING_LINES = [
   {
     id: 'qigua',         // 起卦（摇奖线）
     name: '起卦',
     tasks: [
-      { id: 'ob_draw1',     title: '抽一次签',         target: 1, reward: { type: 'fragment', amount: 5 }, goto: 'draw' },
-      { id: 'ob_draw10',    title: '抽十次签',         target: 1, reward: { type: 'talisman', id: 'cheng', amount: 1 }, goto: 'draw_ten' },
-      { id: 'ob_spin1',     title: '转一次奖励转盘',   target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'spin' },
-      { id: 'ob_spin10',    title: '转十次奖励转盘',   target: 1, reward: { type: 'coin', amount: 1 }, goto: 'spin_ten' }
+      { id: 'ob_draw1',     title: '抽一次签',         target: 1, reward: { type: 'taiji', amount: 5 }, goto: 'draw' },
+      { id: 'ob_spin1',     title: '转一次奖励转盘',   target: 1, reward: { type: 'trigram', id: 'qian', amount: 15 }, goto: 'spin' },
+      { id: 'ob_draw10',    title: '抽十次签',         target: 1, reward: { type: 'trigram', id: 'qian', amount: 15 }, goto: 'draw_ten' },
+      { id: 'ob_spin10',    title: '转十次奖励转盘',   target: 1, reward: { type: 'all_coins' }, goto: 'spin_ten' }
     ]
   },
   {
-    id: 'guanxiang',      // 观象（主题和收集线）
-    name: '观象',
-    tasks: [
-      { id: 'ob_view_coin',    title: '在抽奖结果弹窗点击硬币查看卦象', target: 1, reward: { type: 'fragment', amount: 2 }, goto: 'draw' },
-      { id: 'ob_view_hex',     title: '在收集册查看一次卦象',   target: 1, reward: { type: 'talisman', id: 'yi', amount: 1 }, goto: 'collection' }
-    ]
-  },
-  {
-    id: 'dingshu',        // 定数（奖励设置线）
+    id: 'dingshu',        // 定数（任务设置线）
     name: '定数',
     tasks: [
       { id: 'ob_add_task',       title: '添加一个任务',         target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'settings' },
-      { id: 'ob_edit_task',      title: '编辑一个任务',         target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'settings' },
-      { id: 'ob_add_milestones', title: '添加3个里程碑',        target: 3, reward: { type: 'talisman', id: 'yun', amount: 1 }, goto: 'settings' },
-      { id: 'ob_claim_milestone', title: '开箱一个里程碑',      target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'settings' }
+      { id: 'ob_edit_task',      title: '编辑一个任务',         target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'settings' }
+    ]
+  },
+  {
+    id: 'guizang',       // 归藏（起卦线完成后解锁）
+    name: '归藏',
+    unlockAfter: 'qigua',
+    tasks: [
+      { id: 'ob_view_coin_count', title: '查看荷包内硬币数量', target: 1, reward: { type: 'fragment', amount: 8 }, goto: 'backpack' },
+      { id: 'ob_synth',           title: '合成币胚',       target: 1, reward: { type: 'talisman', id: 'cai', amount: 1 }, goto: 'fragment' },
+      { id: 'ob_use_talis',       title: '使用一张符箓',       target: 1, reward: { type: 'point', amount: 5 }, goto: 'talisman' },
+      { id: 'ob_view_points_log', title: '查看贝筹流水',       target: 1, reward: { type: 'talisman', id: 'yun', amount: 1 }, goto: 'points_log' }
+    ]
+  },
+  {
+    id: 'guanxiang',      // 观象（主题和收集线，归藏线完成后解锁）
+    name: '观象',
+    unlockAfter: 'guizang',
+    tasks: [
+      { id: 'ob_view_coin',    title: '在抽奖结果弹窗点击硬币查看卦象', target: 1, reward: { type: 'fragment', amount: 2 }, goto: 'draw' },
+      { id: 'ob_view_hex',     title: '在收集册查看一次卦象',   target: 1, reward: { type: 'talisman', id: 'yi', amount: 1 }, goto: 'collection' }
     ]
   },
   {
@@ -287,6 +300,15 @@ export const ONBOARDING_LINES = [
     ]
   },
   {
+    id: 'hongjian',       // 鸿渐（里程碑线，定数线完成后解锁）
+    name: '鸿渐',
+    unlockAfter: 'dingshu',
+    tasks: [
+      { id: 'ob_add_milestones', title: '添加3个里程碑',        target: 3, reward: { type: 'talisman', id: 'yun', amount: 1 }, goto: 'settings' },
+      { id: 'ob_claim_milestone', title: '开箱一个里程碑',      target: 1, reward: { type: 'fragment', amount: 3 }, goto: 'settings' }
+    ]
+  },
+  {
     id: 'shilu',         // 实录（数据导出线，市易线完成后解锁）
     name: '实录',
     unlockAfter: 'shiyi',
@@ -295,14 +317,11 @@ export const ONBOARDING_LINES = [
     ]
   },
   {
-    id: 'guizang',       // 归藏（起卦线完成后解锁）
-    name: '归藏',
-    unlockAfter: 'qigua',
+    id: 'tongmeng',      // 童蒙（鸿渐线完成后解锁）
+    name: '童蒙',
+    unlockAfter: 'hongjian',
     tasks: [
-      { id: 'ob_view_coin_count', title: '查看荷包内硬币数量', target: 1, reward: { type: 'fragment', amount: 8 }, goto: 'backpack' },
-      { id: 'ob_synth',           title: '合成币胚',       target: 1, reward: { type: 'talisman', id: 'cai', amount: 1 }, goto: 'fragment' },
-      { id: 'ob_use_talis',       title: '使用一张符箓',       target: 1, reward: { type: 'point', amount: 5 }, goto: 'talisman' },
-      { id: 'ob_view_points_log', title: '查看贝筹流水',       target: 1, reward: { type: 'talisman', id: 'yun', amount: 1 }, goto: 'points_log' }
+      { id: 'ob_view_help', title: '查看帮助', target: 1, reward: { type: 'talisman', id: 'cheng', amount: 1 }, goto: 'settings_help' }
     ]
   }
 ];
