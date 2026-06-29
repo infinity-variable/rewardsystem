@@ -127,7 +127,7 @@ function openBonusChallengeModal(nonFreePcts, sectors) {
     item.className = 'coin-select-item';
     item.style.cursor = 'default';
     item.innerHTML = `
-      <div class="coin-icon" style="background-image:url('${CONFIG.IMG_ITEM}');background-size:100% 100%;padding-right:5px">
+      <div class="coin-icon" style="background-image:url('${CONFIG.IMG_ITEM}');background-size:100% 100%">
         <div class="coin-char spin-tier-char" style="background:${sector.color};color:${CONFIG.COLOR_WHITE};font-size:0.9rem;width:auto;min-width:44px;padding:0 6px">${bonusDisplayLabel(sector.label)}</div>
       </div>
     `;
@@ -266,7 +266,7 @@ function handleBonusResult(sectorIndex) {
   item.className = 'coin-select-item';
   item.style.cursor = 'default';
   item.innerHTML = `
-    <div class="coin-icon" style="background-image:url('${CONFIG.IMG_ITEM}');background-size:100% 100%;padding-right:5px">
+    <div class="coin-icon" style="background-image:url('${CONFIG.IMG_ITEM}');background-size:100% 100%">
       <div class="coin-char spin-tier-char" style="background:${sector.color};color:${CONFIG.COLOR_WHITE};font-size:0.9rem;width:auto;min-width:44px;padding:0 6px">${bonusDisplayLabel(sector.label)}</div>
     </div>
   `;

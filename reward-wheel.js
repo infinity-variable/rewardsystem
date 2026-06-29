@@ -159,24 +159,22 @@ function handleRewardResult(sectorIndex, drops) {
   handleNormalSector(state, sector, investedCount, tierNames, tierColors, drops);
 }
 
-// 机缘扇区：先给丙等贝筹，展示机缘卡片并显示"进入机缘转盘"按钮
+// 机缘扇区：不发放初始积分，仅展示机缘卡片并显示"进入机缘转盘"按钮。
+// 实际奖励由后续机缘挑战的完成/放弃结算发放（见 bonus-wheel.js）。
 function handleBonusSector(state, sector, investedCount, drops) {
-  const bonusTierPoints = CONFIG.BONUS_INITIAL_POINTS;
-  state.points += bonusTierPoints;
-  addPointLog('earn', bonusTierPoints, '奖励转盘 机缘');
-  console.log(`[奖励转盘] 结果=机缘，投入铜币=${investedCount}，先给丙等+${bonusTierPoints}贝筹，进入机缘转盘`);
+  console.log(`[奖励转盘] 结果=机缘，投入铜币=${investedCount}，进入机缘转盘`);
 
   const grid = $('one-spin-grid');
   const pointsDiv = $('one-spin-points');
   grid.innerHTML = '';
   const dropItems = buildDropItems(drops);
   grid.style.gridTemplateColumns = `repeat(${1 + dropItems.length}, 1fr)`;
-  pointsDiv.textContent = `+${bonusTierPoints} 贝筹`;
+  pointsDiv.textContent = '进入机缘转盘';
   // 抽到机缘：只显示机缘按键，不显示收下
   $('one-spin-bonus-btn').style.display = 'inline-block';
   $('one-spin-close').style.display = 'none';
 
-  grid.appendChild(createRewardItem('机缘', bonusTierPoints, sector.color));
+  grid.appendChild(createRewardItem('机缘', 0, sector.color, { showPoints: false }));
   dropItems.forEach(it => grid.appendChild(it));
 
   commit();

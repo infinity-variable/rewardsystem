@@ -1905,6 +1905,36 @@ body {
   font-size: 0.92rem;
 }
 
+.quick-brief-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--radius);
+}
+
+/* 图片大图查看器 */
+#img-viewer {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+  cursor: zoom-out;
+}
+#img-viewer.active {
+  display: flex;
+}
+#img-viewer img {
+  max-width: 95vw;
+  max-height: 95vh;
+  object-fit: contain;
+  border-radius: 4px;
+  cursor: default;
+}
+
 /* ===== 关于模块 ===== */
 .about-section {
   margin-top: 20px;

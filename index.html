@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>奖励转盘系统</title>
+  <title>只登一步</title>
   <meta name="description" content="基于周易八卦的奖励转盘系统，通过抽签、投币、转盘玩法定制个人任务奖励，哄自己做该做的事。">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@chinese-fonts/lxgwwenkai/dist/LXGWWenKai-Medium/result.css">
@@ -246,16 +246,16 @@
             <button id="settings-reset" class="btn-danger btn-window">清零</button>
             <input type="file" id="import-data-file" accept=".json" class="hidden">
           </div>
-        </div>
+        </div>·
 
         <div class="milestone-section">
-          <h3>音效</h3>
+          <h3>音效
+            <label class="sound-toggle-label" style="margin-top:0;margin-left:auto">
+              <input type="checkbox" id="sound-enabled-checkbox">
+              <span class="sound-toggle-switch"></span>
+            </label>
+          </h3>
           <p class="hint">开启后，抽签、转盘、领取奖励等操作会播放音效</p>
-          <label class="sound-toggle-label">
-            <input type="checkbox" id="sound-enabled-checkbox">
-            <span class="sound-toggle-switch"></span>
-            <span class="sound-toggle-text">音效</span>
-          </label>
         </div>
 
         <div class="milestone-section" id="settings-help-section">
@@ -314,43 +314,7 @@
         <button class="help-tab" data-tab="detail">详细说明</button>
       </div>
       <div class="help-panel active" data-panel="quick">
-        <h2>快速上手</h2>
-        <p class="hint">五步看懂核心玩法</p>
-        <div class="quick-step">
-          <div class="quick-step-num">1</div>
-          <div class="quick-step-body">
-            <h3>抽签得铜币</h3>
-            <p>点击主界面签筒抽签，随机获得一枚八卦铜币或太极币。</p>
-          </div>
-        </div>
-        <div class="quick-step">
-          <div class="quick-step-num">2</div>
-          <div class="quick-step-body">
-            <h3>投币转盘</h3>
-            <p>点「转盘」，每次自动投 3 枚铜币旋转奖励转盘。</p>
-          </div>
-        </div>
-        <div class="quick-step">
-          <div class="quick-step-num">3</div>
-          <div class="quick-step-body">
-            <h3>赢得贝筹</h3>
-            <p>转盘结果按等级发放贝筹（1/3/5/10），机缘可触发额外挑战。</p>
-          </div>
-        </div>
-        <div class="quick-step">
-          <div class="quick-step-num">4</div>
-          <div class="quick-step-body">
-            <h3>兑换奖励</h3>
-            <p>点「商城」，用贝筹兑换自定义商品。</p>
-          </div>
-        </div>
-        <div class="quick-step">
-          <div class="quick-step-num">5</div>
-          <div class="quick-step-body">
-            <h3>自定义设置</h3>
-            <p>点「设置」自定义任务、里程碑奖励、商城商品，开始哄自己做任务。</p>
-          </div>
-        </div>
+        <img src="img/brief.png" alt="快速上手" class="quick-brief-img" onclick="document.getElementById('img-viewer').classList.add('active')" style="cursor:zoom-in">
       </div>
       <div class="help-panel" data-panel="detail">
       <h2>详细使用说明</h2>
@@ -720,6 +684,11 @@
         <button id="health-notice-confirm" class="btn-success btn-window">我已知晓</button>
       </div>
     </div>
+  </div>
+
+  <!-- 图片大图查看器 -->
+  <div id="img-viewer" onclick="this.classList.remove('active')">
+    <img src="img/brief.png" alt="快速上手" onclick="event.stopPropagation()">
   </div>
 
   <script type="module" src="app.js"></script>

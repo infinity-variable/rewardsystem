@@ -15,7 +15,6 @@ export const CONFIG = {
   TIER_B_POINTS: 3,               // 乙等
   TIER_A_POINTS: 5,               // 甲等
   TIER_S_POINTS: 10,              // 至尊
-  BONUS_INITIAL_POINTS: 1,        // 转到机缘时先给的贝筹
   BONUS_TAIJI_REWARD: 1,          // 完成机缘挑战奖励的太极币数
 
   // 奖励转盘概率
