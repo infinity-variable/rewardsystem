@@ -116,7 +116,7 @@ export async function renderCollection() {
     // 新卦象可领取币胚，标记为 bonus 音效
     if (isNew) item.dataset.sound = 'bonus';
     item.innerHTML = `
-      <div class="collection-icon"><div class="collection-icon-inner" style="background:${trigramColor}">${collected ? guafu : num}</div></div>
+      <div class="collection-icon"><div class="collection-icon-inner" ${collected ? `style="background:${trigramColor}"` : 'style="background:#000;border-color:#000"'}>${collected ? guafu : ''}</div></div>
       <div class="collection-name">${collected ? name : '???'}</div>
       ${isNew ? '<span class="hex-red-dot"></span>' : ''}
     `;

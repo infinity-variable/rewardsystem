@@ -413,12 +413,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== 秘籍弹窗 =====
   // 所有带 data-cheats 属性的按键都打开秘籍弹窗
+  // data-cheats-section 指定只显示对应分区（task/milestone/shop），不指定则显示全部
   document.querySelectorAll('[data-cheats]').forEach(btn => {
     btn.addEventListener('click', () => {
+      const section = btn.dataset.cheatsSection;
+      document.querySelectorAll('#cheats-modal [data-cheats-section]').forEach(el => {
+        el.style.display = (!section || el.dataset.cheatsSection === section) ? '' : 'none';
+      });
       $('cheats-modal').classList.add('active');
     });
   });
   bindClick('settings-cheats', () => {
+    document.querySelectorAll('#cheats-modal [data-cheats-section]').forEach(el => {
+      el.style.display = '';
+    });
     $('cheats-modal').classList.add('active');
   });
   bindClick('cheats-cancel', () => {

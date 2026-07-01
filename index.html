@@ -226,13 +226,13 @@
       <!-- 通用面板：任务 / 里程碑 / 数据管理 / 帮助 / 关于 -->
       <div class="help-panel active" data-set-panel="general">
         <div class="milestone-section">
-          <h3>任务 <button class="btn-add-milestone" id="add-task">+</button><button class="btn-cheats btn-success btn-window" data-cheats title="查看秘籍">秘籍</button></h3>
+          <h3>任务 <button class="btn-add-milestone" id="add-task">+</button><button class="btn-cheats btn-success btn-window" data-cheats data-cheats-section="task" title="查看秘籍">秘籍</button></h3>
           <p class="hint">当执行任务达到指定数量时可抽奖，建议每条任务量大于3个</p>
           <div id="task-list"></div>
         </div>
 
         <div class="milestone-section">
-          <h3>里程碑奖励 <button class="btn-add-milestone" id="add-milestone">+</button><button class="btn-cheats btn-success btn-window" data-cheats title="查看秘籍">秘籍</button></h3>
+          <h3>里程碑奖励 <button class="btn-add-milestone" id="add-milestone">+</button><button class="btn-cheats btn-success btn-window" data-cheats data-cheats-section="milestone" title="查看秘籍">秘籍</button></h3>
           <p class="hint">当累计投入铜币达到指定数量时，达成里程碑奖励，初始建议设置5个</p>
           <div id="milestone-list"></div>
         </div>
@@ -284,7 +284,7 @@
       <!-- 商城商品面板 -->
       <div class="help-panel" data-set-panel="shop">
         <div class="milestone-section">
-          <h3>商城商品 <button class="btn-add-milestone" id="add-shop-item">+</button><button class="btn-cheats btn-success btn-window" data-cheats title="查看秘籍">秘籍</button></h3>
+          <h3>商城商品 <button class="btn-add-milestone" id="add-shop-item">+</button><button class="btn-cheats btn-success btn-window" data-cheats data-cheats-section="shop" title="查看秘籍">秘籍</button></h3>
           <p class="hint">设置贝筹商城中的商品及所需贝筹</p>
           <div id="shop-item-list"></div>
         </div>
@@ -445,27 +445,29 @@
     <div class="modal-content">
       <button class="btn-x" id="cheats-cancel" title="关闭（Esc）">&times;</button>
       <h2>秘籍</h2>
-      <div class="coin-info-section">
+      <div class="coin-info-section" data-cheats-section="task">
+        <h3>任务</h3>
+        <p>单条任务数量建议大于等于四，这样在抽机缘时可以减量。比如「马步1m」写「马步60s」，机缘界面如果抽到「一半」会自动换算为30s。</p>
+        <p>任务可以是实物也可以是体验性的，以下是一些任务灵感：马步60s、慢跑1000m、冥想30m、阅读10m、专注计时25m。</p>
+      </div>
+      <div class="coin-info-section" data-cheats-section="milestone">
         <h3>里程碑</h3>
-        <p>建议初步设置不超过 5 个里程碑，在里程碑达成后再逐步添加。</p>
+        <p>里程碑一开始设置3~5个，不要设置太远的，就像萝卜要吊在驴子嘴边儿。在里程碑达成后再逐步添加。</p>
+        <p>里程最开始可以是10、20、50，达成之后慢慢累加。比如达成20之后再给自己加达成70和100的奖励。</p>
+        <p>建议里程碑放没法立刻兑现的大件，可以是有点舍不得买的物品、不舍得去的地方。</p>
+        <p>一些里程碑灵感：</p>
+        <p>体验型消费：泡在视频和电影里的一天、推拿SPA、新发色、三亚度假</p>
+        <p>非刚需升级：防蓝光眼镜、人体工学椅、夏凉被、新电脑、新手机</p>
       </div>
-      <div class="coin-info-section">
-        <h3>任务数量</h3>
-        <p>单条任务数量建议大于等于 4，这样在抽机缘时可以减量。</p>
-        <p>比如跑步 1km（写作 1000m），机缘界面如果抽到「一半」会自动换算为 500m。</p>
-      </div>
-      <div class="coin-info-section">
-        <h3>里程碑 vs 商城</h3>
-        <p>建议里程碑放大一点的，商城放小一点的立刻可以得到的。</p>
-        <p>大一点的可以是有点舍不得买的物品比如新电脑、不舍得去的地方比如三亚。小一点的可以是立刻就能得到的东西，比如推拿或者芝士蛋糕</p>
-      </div>
-      <div class="coin-info-section">
-        <h3>纯上瘾项</h3>
-        <p>商城一定要有一个纯上瘾的东西：如果对某个游戏上瘾就放个游戏局数，如果对刷短视频上瘾就放短视频时长，还有开盲盒或者收集周边。</p>
-        <p>这个纯上瘾的东西还有 3 个属性：</p>
+      <div class="coin-info-section" data-cheats-section="shop">
+        <h3>商城</h3>
+        <p>商城一定要有一个纯上瘾的东西，如果对某个游戏上瘾就放个游戏局数，如果对刷短视频上瘾就放短视频时长，还有开盲盒或者收集周边。这是驱动自己做事的最强动力。</p>
+        <p>这个纯上瘾的东西还有3个属性：</p>
         <p>1、单是想到这个事情你就觉得蠢蠢欲动。</p>
-        <p>2、你不可以在非兑换的情况下得到它或体验它，比如选了游戏，没兑换就不可以玩。</p>
+        <p>2、你不可以在非兑换的情况下得到它或体验它，比如选了游戏拿没兑换就不可以玩。</p>
         <p>3、在这个事情上投入大量时间和钱是让你后悔的。</p>
+        <p>商城里放立刻能得到的小件。</p>
+        <p>一些商城商品灵感：刷手机、打游戏、吃垃圾零食。</p>
       </div>
       <button class="btn-close btn-window" id="cheats-close">知道了</button>
     </div>
